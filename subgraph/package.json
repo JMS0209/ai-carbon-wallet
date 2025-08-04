@@ -1,0 +1,15 @@
+{
+  "name": "ai-carbon-wallet-subgraph",
+  "version": "0.1.0",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ ai-carbon-wallet",
+    "create-local": "graph create --node http://localhost:8020/ ai-carbon-wallet",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ai-carbon-wallet"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.56.0",
+    "@graphprotocol/graph-ts": "^0.31.0"
+  }
+}

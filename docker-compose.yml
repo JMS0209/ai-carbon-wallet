@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  # PostgreSQL for backend data storage
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: aicarbon
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis for caching and session storage
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # The Graph Node for blockchain indexing
+  graph-node:
+    image: graphprotocol/graph-node:latest
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8020:8020"
+      - "8030:8030"
+      - "8040:8040"
+    depends_on:
+      - postgres
+      - ipfs
+    environment:
+      postgres_host: postgres
+      postgres_user: postgres
+      postgres_pass: postgres
+      postgres_db: aicarbon
+      ipfs: 'ipfs:5001'
+      ethereum: 'polygon:https://polygon-rpc.com'
+      GRAPH_LOG: info
+
+  # IPFS for decentralized storage
+  ipfs:
+    image: ipfs/go-ipfs:latest
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8080:8080"
+    volumes:
+      - ipfs_data:/data/ipfs
+
+  # Sui Local Network (for development)
+  sui-localnet:
+    image: mysten/sui-tools:latest
+    command: ["sui", "start", "--network.config", "/opt/sui/network.yaml"]
+    ports:
+      - "9000:9000"
+      - "9184:9184"
+    volumes:
+      - sui_data:/opt/sui/db
+
+  # Oasis Sapphire Development Node
+  sapphire-dev:
+    image: oasisprotocol/sapphire-dev:latest
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+    environment:
+      OASIS_UNSAFE_SKIP_AVR_VERIFY: "1"
+      OASIS_UNSAFE_SKIP_KM_POLICY: "1"
+    volumes:
+      - sapphire_data:/data
+
+  # Kafka for real-time data streaming
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
+  # Zookeeper for Kafka coordination
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  ipfs_data:
+  sui_data:
+  sapphire_data:
+  kafka_data:
+  zookeeper_data:

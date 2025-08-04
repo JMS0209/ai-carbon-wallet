@@ -1,0 +1,40 @@
+{
+  "name": "ai-carbon-wallet",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "backend:dev": "cd backend && npm run dev",
+    "oracle:build": "cd oracle && npm run build",
+    "contracts:test": "cd contracts && npm test",
+    "subgraph:codegen": "cd subgraph && graph codegen",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@supabase/supabase-js": "^2.38.0",
+    "@mysten/sui.js": "^0.45.0",
+    "@oasisprotocol/sapphire-paratime": "^1.3.0",
+    "ethers": "^6.8.0",
+    "graphql": "^16.8.0",
+    "@apollo/client": "^3.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.2.0",
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^3.4.0",
+    "postcss": "^8.4.0",
+    "eslint": "^8.51.0",
+    "eslint-config-next": "^14.0.0"
+  }
+}
