@@ -1,8 +1,8 @@
-import { HardhatUserConfig } from "hardhat/config";
+const { task } = require("hardhat/config");
 import "@nomicfoundation/hardhat-toolbox";
 import "@oasisprotocol/sapphire-hardhat";
 
-const config: HardhatUserConfig = {
+const config = {
   solidity: "0.8.19",
   networks: {
     sapphire: {
@@ -18,4 +18,5 @@ const config: HardhatUserConfig = {
   }
 };
 
-export default config;
+module.exports = config;
+
