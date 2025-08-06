@@ -10,6 +10,9 @@ const nextConfig = {
     NEXT_PUBLIC_SALT_API: process.env.NEXT_PUBLIC_SALT_API,
     NEXT_PUBLIC_PROVER_API: process.env.NEXT_PUBLIC_PROVER_API,
   },
+  sapphire: {
+    rpcUrl: "https://sapphire.oasis.io/rpc"
+  },
 }
 
 export default nextConfig
