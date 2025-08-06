@@ -1,12 +1,11 @@
 {
   "name": "ai-carbon-wallet-oracle",
   "version": "0.1.0",
-  "type": "module",
   "scripts": {
     "build": "hardhat compile",
     "test": "hardhat test",
-    "deploy": "hardhat run scripts/deploy.ts",
-    "verify": "hardhat run scripts/verify-proofs.ts"
+    "deploy": "hardhat run scripts/deploy.cjs",
+    "verify": "hardhat run scripts/verify-proofs.cjs"
   },
   "dependencies": {
     "@oasisprotocol/sapphire-hardhat": "^2.0.0",

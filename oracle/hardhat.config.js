@@ -1,12 +1,15 @@
 const { task } = require("hardhat/config");
-import "@nomicfoundation/hardhat-toolbox";
-import "@oasisprotocol/sapphire-hardhat";
+require("@nomicfoundation/hardhat-toolbox");
+require("@oasisprotocol/sapphire-hardhat");
+const dotenv = require("dotenv");
 
-const config = {
+require("dotenv").config();
+
+module.exports = {
   solidity: "0.8.19",
   networks: {
     sapphire: {
-      url: "https://sapphire.oasis.io",
+      url: process.env.OASIS_RPC_URL,
       accounts: process.env.ORACLE_PRIVATE_KEY ? [process.env.ORACLE_PRIVATE_KEY] : [],
       chainId: 0x5afe
     },
