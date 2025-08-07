@@ -4,6 +4,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+burner.json
+{
+  "privateKey": "0xabc123...yourPrivateKeyHere"
+}
+
+
 # Next.js
 .next/
 out/
