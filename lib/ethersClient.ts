@@ -1,3 +1,5 @@
+// expose typed provider and signer objects
+
 import { ethers } from "ethers";
 import { Wallet, JsonRpcProvider } from "ethers";
 const RPC_URL = process.env.RPC_URL;

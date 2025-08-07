@@ -1,0 +1,44 @@
+backend/
+Subfolder	Expected Contents
+api/	Serverless functions (e.g. Next.js API routes), integrations with Oasis Sapphire, Sui, or USDC
+collectors/	Scripts to gather AI usage data (e.g. from Ecologits.ai or CodeCarbon)
+scheduler/	Cron-like tasks for syncing subgraph data, refreshing oracle feeds, or billing
+
+No clear integration points for:
+
+Oasis Sapphire signer logic
+
+Trustless Oracle fetchers
+
+Sui zkLogin or kiosk triggers
+
+USDC micropayment handlers
+
+No subgraph sync logic — this might belong in scheduler/ or a dedicated subgraphs/ folder
+
+No carbon credit purchasing logic — could be in api/ or a new payments/ folder
+
+
+
+
+backend folder refinement
+backend/
+├── api/                # Serverless endpoints (e.g. /purchase-carbon, /get-footprint)
+├── collectors/         # AI usage + energy data collectors (Ecologits, CodeCarbon)
+├── scheduler/          # Cron jobs for syncing subgraphs, oracle refresh
+├── oasis/              # Sapphire signer logic, private key handling
+├── sui/                # zkLogin, kiosk, smart contract triggers
+├── payments/           # USDC micropayment logic
+├── oracles/            # Trustless oracle fetchers
+
+
+Modular Suggestions
+Move signer logic and Sapphire integration out of api/ into oasis/
+
+Keep Sui logic isolated in sui/ for clarity and scalability
+
+Create payments/ to handle USDC flows and billing
+
+Add subgraphs/ folder if you plan to manage Graph mappings or sync logic
+
+

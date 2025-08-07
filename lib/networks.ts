@@ -1,4 +1,10 @@
-export const NETWORKS = {
+export interface NetworkConfig {
+  name: string;
+  rpcUrl: string;
+  chainId: number;
+}
+
+export const NETWORKS: Record<string, NetworkConfig> = {
   sapphireTestnet: {
     name: 'Sapphire Testnet',
     rpcUrl: 'https://testnet.sapphire.oasis.dev',
