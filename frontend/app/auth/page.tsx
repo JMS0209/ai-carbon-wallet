@@ -127,7 +127,8 @@ export default function AuthPage() {
           maxEpoch: userKeyData.maxEpoch.toString(),
           jwtRandomness: userKeyData.randomness,
           salt: userSalt.toString(),
-          keyClaimName: "sub"
+          keyClaimName: "sub",
+          nonce: userKeyData.nonce // Add the nonce that was used in OAuth
         };
 
         console.log("ZK Proof Request Payload:", proverPayload);

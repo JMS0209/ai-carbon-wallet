@@ -4,7 +4,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import { createHash } from 'crypto';
 
-const PROVER_URL = process.env.PROVER_URL || 'https://prover-dev.mystenlabs.com/v1/zklogin';
+const PROVER_URL = process.env.PROVER_URL || 'https://prover.mystenlabs.com/v1';
 
 // Initialize SQLite database
 const dbPath = path.join(process.cwd(), 'data', 'zklogin.db');

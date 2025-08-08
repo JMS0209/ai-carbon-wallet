@@ -30,6 +30,8 @@
     "burner-connector": "0.0.16",
     "daisyui": "5.0.9",
     "graphql": "^16.8.0",
+    "graphql-request": "^7.2.0",
+    "jwt-decode": "^4.0.0",
     "kubo-rpc-client": "~5.0.2",
     "next": "~15.2.3",
     "next-nprogress-bar": "~2.3.13",
