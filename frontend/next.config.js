@@ -1,14 +1,31 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
+  reactStrictMode: true,
+  devIndicators: false,
+  typescript: {
+    ignoreBuildErrors: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
   },
-  images: {
-    domains: ['images.unsplash.com', 'via.placeholder.com'],
+  eslint: {
+    ignoreDuringBuilds: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
+  },
+  webpack: config => {
+    config.resolve.fallback = { fs: false, net: false, tls: false };
+    config.externals.push("pino-pretty", "lokijs", "encoding");
+    return config;
   },
   env: {
     CUSTOM_KEY: 'ai-carbon-wallet',
   },
+};
+
+const isIpfs = process.env.NEXT_PUBLIC_IPFS_BUILD === "true";
+
+if (isIpfs) {
+  nextConfig.output = "export";
+  nextConfig.trailingSlash = true;
+  nextConfig.images = {
+    unoptimized: true,
+  };
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;
