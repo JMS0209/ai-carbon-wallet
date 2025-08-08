@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { StatCard } from "~~/components/StatCard";
 import { StatusCard } from "~~/components/StatusCard";
 import { ProtectedRoute } from "~~/components/ProtectedRoute";
+import { WithRoleGuard } from "~~/providers/withRoleGuard";
 import { useAuth } from "~~/context/AuthContext";
 import { BackendService } from "~~/services/backend";
 import { OracleService } from "~~/services/oracle";
@@ -11,6 +12,9 @@ import { SuiService } from "~~/services/sui";
 import { SealWalrusService } from "~~/services/sealWalrus";
 import { SubgraphService } from "~~/services/subgraph";
 import { UsdcService } from "~~/services/usdc";
+import { probeSeal as rbacProbeSeal, probeWalrus as rbacProbeWalrus } from "~~/services/rbac/sealStore";
+import { currentRole as rbacCurrentRole } from "~~/services/rbac/roles";
+import { getEnergyNftListings } from "~~/services/suiKiosk";
 
 interface ModuleStatus {
   status: 'ok' | 'warn' | 'fail' | 'skip';
@@ -20,12 +24,14 @@ interface ModuleStatus {
 export default function DashboardPage() {
   const { userAddress, userKeyData } = useAuth();
   const [moduleStatuses, setModuleStatuses] = useState<Record<string, ModuleStatus>>({
+    rbac: { status: 'skip', details: 'Not tested yet' },
     collectors: { status: 'skip', details: 'Not tested yet' },
     oracle: { status: 'skip', details: 'Not tested yet' },
     sui: { status: 'skip', details: 'Not tested yet' },
     seal: { status: 'skip', details: 'Not tested yet' },
     subgraph: { status: 'skip', details: 'Not tested yet' },
     usdc: { status: 'skip', details: 'Not tested yet' },
+    marketplace: { status: 'skip', details: 'Not tested yet' },
   });
 
   const testCollectors = async () => {
@@ -117,6 +123,38 @@ export default function DashboardPage() {
     }
   };
 
+  const testRbac = async () => {
+    try {
+      const role = await rbacCurrentRole();
+      if (!role) {
+        setModuleStatuses(prev => ({ ...prev, rbac: { status: 'skip', details: 'No role set' } }));
+        return;
+      }
+      const seal = await rbacProbeSeal();
+      const walrus = await rbacProbeWalrus();
+      const ok = seal.servers > 0;
+      const details = `role=${role}; seal.servers=${seal.servers}${walrus?.url ? `; walrus=${walrus.ok ? 'ok' : 'unreachable'}` : ''}`;
+      setModuleStatuses(prev => ({ ...prev, rbac: { status: ok ? (walrus?.url && !walrus.ok ? 'warn' : 'ok') : 'fail', details } }));
+      console.log(`[${new Date().toISOString()}] rbac ${ok ? 'ok' : 'fail'} ${details}`);
+    } catch (error) {
+      setModuleStatuses(prev => ({ ...prev, rbac: { status: 'fail', details: error instanceof Error ? error.message : 'Unknown error' } }));
+    }
+  };
+
+  const testMarketplace = async () => {
+    try {
+      const t0 = Date.now();
+      const { count, details } = await getEnergyNftListings();
+      const dt = Date.now() - t0;
+      const status: 'ok' | 'skip' = count >= 0 ? 'ok' : 'skip';
+      const info = `listings=${count}; ${details}; ${dt}ms`;
+      setModuleStatuses(prev => ({ ...prev, marketplace: { status, details: info } }));
+      console.log(`[${new Date().toISOString()}] MARKETPLACE ${status} ${info}`);
+    } catch (e: any) {
+      setModuleStatuses(prev => ({ ...prev, marketplace: { status: 'fail', details: e?.message || 'failed' } }));
+    }
+  };
+
   const testSubgraph = async () => {
     try {
       const result = await SubgraphService.testConnection();
@@ -163,6 +201,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
+      <WithRoleGuard>
       <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
         <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
           <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
@@ -196,6 +235,12 @@ export default function DashboardPage() {
             <h2 className="text-2xl font-bold mb-6">Connectivity Status</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              <StatusCard
+                title="Access Control (RBAC)"
+                status={moduleStatuses.rbac.status}
+                details={moduleStatuses.rbac.details}
+                onTest={testRbac}
+              />
               <StatusCard
                 title="Collectors API"
                 status={moduleStatuses.collectors.status}
@@ -237,6 +282,12 @@ export default function DashboardPage() {
                 details={moduleStatuses.usdc.details}
                 onTest={testUsdc}
               />
+              <StatusCard
+                title="Marketplace (Sui Kiosk)"
+                status={moduleStatuses.marketplace.status}
+                details={moduleStatuses.marketplace.details}
+                onTest={testMarketplace}
+              />
             </div>
             
             {/* User Info Section */}
@@ -260,6 +311,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      </WithRoleGuard>
     </ProtectedRoute>
   );
 }

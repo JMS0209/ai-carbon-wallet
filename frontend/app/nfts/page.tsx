@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ProtectedRoute } from "~~/components/ProtectedRoute";
+import { WithRoleGuard } from "~~/providers/withRoleGuard";
 import { useAuth } from "~~/context/AuthContext";
 
 export default function NFTsPage() {
@@ -9,6 +10,7 @@ export default function NFTsPage() {
 
   return (
     <ProtectedRoute>
+      <WithRoleGuard>
       <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
         <div className="flex justify-center items-center">
           <div className="text-center">
@@ -48,6 +50,7 @@ export default function NFTsPage() {
           </div>
         </div>
       </div>
+      </WithRoleGuard>
     </ProtectedRoute>
   );
 }

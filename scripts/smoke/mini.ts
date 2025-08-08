@@ -9,6 +9,7 @@ import { SuiService } from "../../frontend/services/sui";
 import { SealWalrusService } from "../../frontend/services/sealWalrus";
 import { SubgraphService } from "../../frontend/services/subgraph";
 import { UsdcService } from "../../frontend/services/usdc";
+import { getEnergyNftListings } from "../../frontend/services/suiKiosk";
 
 interface TestSummary {
   module: string;
@@ -103,6 +104,19 @@ async function runSmokeTests(): Promise<TestSummary[]> {
       details: error instanceof Error ? error.message : 'Unknown error' 
     });
     console.log(`❌ USDC: fail - ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+
+  // Test 7: Marketplace (Sui Kiosk) - read-only
+  try {
+    const t0 = Date.now();
+    const { count, details } = await getEnergyNftListings();
+    const dt = Date.now() - t0;
+    const status: 'ok' | 'skip' = count >= 0 ? 'ok' : 'skip';
+    results.push({ module: 'Marketplace', status, details: `listings=${count}; ${details}; ${dt}ms` });
+    console.log(`✅ Marketplace: ${status} - listings=${count} (${dt}ms)`);
+  } catch (error) {
+    results.push({ module: 'Marketplace', status: 'fail', details: error instanceof Error ? error.message : 'Unknown error' });
+    console.log(`❌ Marketplace: fail - ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 
   return results;

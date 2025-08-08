@@ -212,6 +212,22 @@ GRAPH_API_KEY=your_graph_api_key
 SUBGRAPH_ENDPOINT=https://api.thegraph.com/subgraphs/name/your-subgraph
 ```
 
+## Progress Log
+
+- [2025-08-09] Step 4: Sui Kiosk marketplace integrated behind RBAC. Added `/marketplace` page with role-gated sections (SIGNER can see "My Assets" and prepare to list; BUYER can view listings). Added TransferPolicy stub in `contracts/SuiMove/`. Dashboard now includes a "Marketplace (Sui Kiosk)" StatusCard with a read-only "Test Now" that reports listing count. Env example updated with Sui Kiosk keys. All secrets remain client-entered; no plaintext persistence.
+
+### Additional Environment Variables (Step 4)
+
+```bash
+# Sui Kiosk demo configuration
+NEXT_PUBLIC_SUI_NETWORK=testnet
+NEXT_PUBLIC_SUI_RPC_URL=https://fullnode.testnet.sui.io:443
+NEXT_PUBLIC_SUI_PACKAGE_ID=            # set your published EnergyNFT package id
+NEXT_PUBLIC_SUI_KIOSK_TYPE=            # optional override; default Sui framework kiosk type
+NEXT_PUBLIC_SUI_GAS_BUDGET=30000000    # demo tx gas budget
+```
+
+
 ## Next Steps
 
 To begin development and scaffold the complete codebase, run the initialization command:
