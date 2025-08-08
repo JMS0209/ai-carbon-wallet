@@ -1,3 +1,90 @@
+the whole project:
+
+project-root/
+├── frontend/                        # Admin dashboard UI
+│   ├── components/
+│   │   ├── roles/
+│   │   │   ├── AssignRole.tsx
+│   │   │   └── RoleStatus.tsx
+│   │   ├── carbon/
+│   │   │   ├── EmissionTracker.tsx     # Shows AI energy + emissions
+│   │   │   └── CarbonMarketplace.tsx   # USDC payment portal
+│   ├── lib/
+│   │   ├── api.ts
+│   │   ├── sealAccess.ts
+│   │   ├── subgraphClient.ts          # Fetch indexed data
+│   │   └── kioskClient.ts             # Interact with Sui Kiosk
+│   ├── pages/
+│   │   └── admin.tsx                  # Unified dashboard
+│   └── styles/
+│       └── dashboard.css
+│
+├── packages/
+│   ├── backend/
+│   │   ├── src/
+│   │   │   ├── api/
+│   │   │   │   ├── assignRole.ts
+│   │   │   │   ├── revokeRole.ts
+│   │   │   │   ├── checkRole.ts
+│   │   │   │   ├── carbonStats.ts      # Fetch emissions data
+│   │   │   │   └── purchaseCredits.ts  # USDC payment handler
+│   │   │   ├── oracle/
+│   │   │   │   └── submitOracleData.ts
+│   │   │   ├── utils/
+│   │   │   │   ├── suiClient.ts
+│   │   │   │   ├── ethClient.ts
+│   │   │   │   ├── subgraph.ts
+│   │   │   │   ├── kiosk.ts
+│   │   │   │   ├── roleHelpers.ts
+│   │   │   │   └── walrusClient.ts
+│   │   └── cli/
+│   │       ├── index.ts
+│   │       └── commands/
+│   │           ├── assignRole.ts
+│   │           ├── revokeRole.ts
+│   │           ├── checkRole.ts
+│   │           └── purchaseCredits.ts
+│
+├── python-tools/                    # Python-based emission tracking
+│   ├── codecarbon_runner.py
+│   ├── ecologits_agent.py
+│   ├── slurm_monitor.py
+│   └── README.md
+│
+├── contracts/                       # Smart contracts (Sapphire + Sui/EVM)
+│   ├── modules/
+│   │   ├── RoleAccess.move
+│   │   ├── CarbonMarketplace.move     # Sui Kiosk integration
+│   │   └── EmissionOracle.sol         # Ethereum/Sapphire oracle
+│   └── Move.toml
+│
+├── subgraphs/                       # Indexing layer
+│   ├── carbon.graphql
+│   ├── roles.graphql
+│   └── marketplace.graphql
+│
+├── .env
+├── tsconfig.json
+└── README.md
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 backend/
 ├── api/                # typescript Serverless endpoints (e.g. /purchase-carbon, /get-footprint)
 ├── collectors/         # python AI usage + energy data collectors (Ecologits, CodeCarbon)

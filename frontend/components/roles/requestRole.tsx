@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { assignRole } from '../lib/api';
+import { assignRole } from '../../lib/api';
 
 export default function AssignRole() {
   const [address, setAddress] = useState('');
