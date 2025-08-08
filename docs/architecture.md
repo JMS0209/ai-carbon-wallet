@@ -49,8 +49,44 @@ project-root/
 │   ├── backend/
 │   │   ├── src/
 │   │   │   ├── api/
+                ├── emissions.ts           # GET emissions data from Python agents or subgraph
+                ├── carbonCredits.ts       # POST purchase request, GET available credits
+                ├── wallet.ts              # GET wallet metadata, balances, roles
+                ├── oracle.ts              # Trigger oracle updates, fetch latest values
+                ├── auth.ts                # Role-based access control, Seal/Walrus integration
+                ├── networks.ts             # Chain status, supported networks, RPC health
+                ├── webhook.ts             # Handle external triggers (e.g. carbon offset confirmations)
+                ├── index.ts
 │   │   │   ├── oracle/
 │   │   │   ├── utils/
+                ├── ai/
+                │   ├── estimateCarbon.ts          # Compute emissions from AI usage
+                │   ├── normalizeEnergyData.ts     # Clean and standardize energy logs
+                │   └── fetchAIReport.ts           # Pull metrics from Python agents or logs
+
+                ├── crypto/
+                │   ├── encryptPayload.ts          # Encrypt oracle data (Seal/Walrus)
+                │   ├── decryptPayload.ts          # Decrypt confidential responses
+                │   ├── hashMessage.ts             # Generate hashes (keccak256, Poseidon)
+                │   └── signTypedData.ts           # EIP-712 signing helper
+
+                ├── format/
+                │   ├── formatOracleData.ts        # Normalize AI output for on-chain use
+                │   ├── parseSubgraphResponse.ts   # Extract and reshape GraphQL data
+                │   └── convertUnits.ts            # Convert kWh, CO₂e, USD, etc.
+
+                ├── network/
+                │   ├── getProvider.ts             # Return RPC provider per chain
+                │   ├── getSigner.ts               # Return signer object with wallet integration
+                │   └── retryWithBackoff.ts        # Retry logic for flaky RPC/oracle calls
+
+                ├── test/
+                │   ├── validateOracleInput.ts     # Schema check for AI output
+                │   ├── mockOracleData.ts          # Generate mock data for local testing
+                │   └── compareChainResponses.ts   # Compare oracle results across chains
+
+                └── index.ts                       # Optional: export all utils from one place
+
 │   │   │   └── cli/
 │
 │   ├── contracts/
