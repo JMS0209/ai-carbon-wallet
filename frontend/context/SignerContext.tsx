@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAccount, useWalletClient } from 'wagmi';
 import { WalletClient } from 'viem';
-import { createSapphireSigner } from '../../lib/sapphireSigner';
+import { createSapphireSigner } from '../lib/sapphire';
 import { createZkLoginSession } from '../lib/zkLogin';
 
 // Placeholder types for Sapphire and zkLogin
