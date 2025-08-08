@@ -1,71 +1,75 @@
 the whole project:
 
 project-root/
-├── frontend/                        # Admin dashboard UI
-│   ├── components/
-│   │   ├── roles/
-│   │   │   ├── AssignRole.tsx
-│   │   │   └── RoleStatus.tsx
-│   │   ├── carbon/
-│   │   │   ├── EmissionTracker.tsx     # Shows AI energy + emissions
-│   │   │   └── CarbonMarketplace.tsx   # USDC payment portal
-│   ├── lib/
-│   │   ├── api.ts
-│   │   ├── sealAccess.ts
-│   │   ├── subgraphClient.ts          # Fetch indexed data
-│   │   └── kioskClient.ts             # Interact with Sui Kiosk
-│   ├── pages/
-│   │   └── admin.tsx                  # Unified dashboard
-│   └── styles/
-│       └── dashboard.css
-│
 ├── packages/
+│   ├── frontend/                    # Scaffold-ETH 2 frontend
+│   │   ├── index.html               # Vite entry point
+│   │   ├── tailwind.config.js
+│   │   ├── postcss.config.js
+│   │   ├── tsconfig.json
+│   │   ├── src/
+│   │   │   ├── main.tsx             # App entry
+│   │   │   ├── index.css            # Tailwind base styles
+│   │   │   ├── components/
+│   │   │   │   ├── roles/
+│   │   │   │   │   ├── AssignRole.tsx
+│   │   │   │   │   └── RoleStatus.tsx
+│   │   │   │   ├── carbon/
+│   │   │   │   │   ├── EmissionTracker.tsx
+│   │   │   │   │   └── CarbonMarketplace.tsx
+│   │   │   │   ├── layout/
+│   │   │   │   │   ├── Header.tsx
+│   │   │   │   │   └── Footer.tsx
+│   │   │   │   └── shared/
+│   │   │   │       ├── Spinner.tsx
+│   │   │   │       └── Toast.tsx
+│   │   │   ├── hooks/
+│   │   │   │   ├── useWallet.ts
+│   │   │   │   ├── useBalance.ts
+│   │   │   │   ├── useContractRead.ts
+│   │   │   │   ├── useContractWrite.ts
+│   │   │   │   ├── useNetwork.ts
+│   │   │   │   ├── useTransaction.ts
+│   │   │   │   ├── useCarbonStats.ts
+│   │   │   │   └── useMarketplace.ts
+│   │   │   ├── lib/
+│   │   │   │   ├── api.ts
+│   │   │   │   ├── sealAccess.ts
+│   │   │   │   ├── kioskClient.ts
+│   │   │   │   ├── subgraphClient.ts
+│   │   │   │   ├── contracts.ts         # viem contract config
+│   │   │   │   └── constants.ts         # env + role IDs
+│   │   │   ├── store/
+│   │   │   │   └── useStore.ts          # Zustand global state
+│   │   │   ├── pages/
+│   │   │   │   └── admin.tsx
+│   │   │   └── utils/
+│   │   │       └── format.ts            # formatters (addresses, units)
+│
 │   ├── backend/
 │   │   ├── src/
 │   │   │   ├── api/
-│   │   │   │   ├── assignRole.ts
-│   │   │   │   ├── revokeRole.ts
-│   │   │   │   ├── checkRole.ts
-│   │   │   │   ├── carbonStats.ts      # Fetch emissions data
-│   │   │   │   └── purchaseCredits.ts  # USDC payment handler
 │   │   │   ├── oracle/
-│   │   │   │   └── submitOracleData.ts
 │   │   │   ├── utils/
-│   │   │   │   ├── suiClient.ts
-│   │   │   │   ├── ethClient.ts
-│   │   │   │   ├── subgraph.ts
-│   │   │   │   ├── kiosk.ts
-│   │   │   │   ├── roleHelpers.ts
-│   │   │   │   └── walrusClient.ts
-│   │   └── cli/
-│   │       ├── index.ts
-│   │       └── commands/
-│   │           ├── assignRole.ts
-│   │           ├── revokeRole.ts
-│   │           ├── checkRole.ts
-│   │           └── purchaseCredits.ts
+│   │   │   └── cli/
 │
-├── python-tools/                    # Python-based emission tracking
-│   ├── codecarbon_runner.py
-│   ├── ecologits_agent.py
-│   ├── slurm_monitor.py
-│   └── README.md
+│   ├── contracts/
+│   │   ├── src/
+│   │   │   ├── EmissionOracle.sol
+│   │   │   ├── CarbonMarketplace.sol
+│   │   │   └── RoleManager.sol
+│   │   ├── deploy/
+│   │   ├── scripts/
+│   │   └── hardhat.config.ts
 │
-├── contracts/                       # Smart contracts (Sapphire + Sui/EVM)
-│   ├── modules/
-│   │   ├── RoleAccess.move
-│   │   ├── CarbonMarketplace.move     # Sui Kiosk integration
-│   │   └── EmissionOracle.sol         # Ethereum/Sapphire oracle
-│   └── Move.toml
-│
-├── subgraphs/                       # Indexing layer
-│   ├── carbon.graphql
-│   ├── roles.graphql
-│   └── marketplace.graphql
-│
+├── sui-contracts/
+├── sapphire-contracts/
+├── python-tools/
+├── subgraphs/
 ├── .env
-├── tsconfig.json
 └── README.md
+
+
 
 
 
