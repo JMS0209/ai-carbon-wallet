@@ -51,13 +51,28 @@ project-root/
 │   │   │   ├── api/
                 ├── emissions.ts           # GET emissions data from Python agents or subgraph
                 ├── carbonCredits.ts       # POST purchase request, GET available credits
-                ├── wallet.ts              # GET wallet metadata, balances, roles
+                ├── wallet/                 # GET wallet metadata, balances, roles
+                        burner.ts
+                        create.ts
+                        index.ts          
                 ├── oracle.ts              # Trigger oracle updates, fetch latest values
                 ├── auth.ts                # Role-based access control, Seal/Walrus integration
                 ├── networks.ts             # Chain status, supported networks, RPC health
                 ├── webhook.ts             # Handle external triggers (e.g. carbon offset confirmations)
                 ├── index.ts
+            |---auth/
+                    verifyRole.ts
 │   │   │   ├── oracle/
+                    |--__tests__/
+                            oracleRelay.test.ts
+                    |--ethereum/
+                            relayOracleData.ts
+                    |--sapphire/
+                            relayOracleData.ts
+                    |-- sui/
+                            relayOracleData.ts
+                    oracleRelay.js
+                    submitOracleData.ts
 │   │   │   ├── utils/
                 ├── ai/
                 │   ├── estimateCarbon.ts          # Compute emissions from AI usage
@@ -88,6 +103,23 @@ project-root/
                 └── index.ts                       # Optional: export all utils from one place
 
 │   │   │   └── cli/
+                ├── index.ts                   # Entry point for CLI commands (e.g. using yargs or commander)
+
+                ├── commands/
+                │   ├── provisionRole.ts       # Assigns roles to wallets (e.g. oracle submitter, admin)
+                │   ├── submitOracle.ts        # Manually triggers oracle data submission
+                │   ├── generateWallet.ts      # Creates and saves burner or named wallets
+                │   ├── checkBalance.ts        # Checks wallet balance across chains
+                │   └── verifySubmission.ts    # Verifies oracle data on-chain
+
+                ├── utils/
+                │   ├── logger.ts              # CLI-friendly logging (colors, timestamps)
+                │   ├── prompt.ts              # Interactive prompts (e.g. confirm, select chain)
+                │   └── formatOutput.ts        # Formats CLI output (tables, JSON, etc.)
+                
+                ├── constants.ts               # Shared constants (e.g. role IDs, chain names)
+                └── types.ts                   # CLI-specific types and interfaces
+
 │
 │   ├── contracts/
 │   │   ├── src/
