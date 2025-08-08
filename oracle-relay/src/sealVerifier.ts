@@ -1,5 +1,5 @@
 import { SealClient } from '@mysten/seal';
-import { SuiClient, getFullnodeUrl } from '@mysten/sui';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 
 const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
 
