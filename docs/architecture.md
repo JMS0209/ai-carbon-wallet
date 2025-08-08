@@ -62,6 +62,19 @@ contracts/
 
 
 
+contracts/
+├── Ethereum/
+│   ├── CarbonCreditManager.sol
+│   ├── USDCMicropayment.sol
+│   ├── AIDataRegistry.sol
+│   └── zkLoginVerifier.sol
+├── Sapphire/
+│   └── SapphireAccessControl.sol
+├── SuiMove/
+│   └── <Move modules>
+
+
+
 
 
 
@@ -143,6 +156,18 @@ focused on raw blockchain interaction
 └── logger.ts               # Centralized logging
 
 
+
+
+
+
+
+
+oracle-relay/
+└── contracts/
+    ├── OracleRelay.sol
+    ├── OracleReceiver.sol
+    ├── MockOracle.sol
+    └── SignerRegistry.sol
 
 
 

@@ -1,6 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+       "buffer": require.resolve("buffer"),
+      "crypto": require.resolve("crypto-browserify"),
+      "stream": require.resolve("stream-browserify"),
+      "util": require.resolve("util"),
+      fs: false,
+      net: false,
+      tls: false,
+    }
+    config.plugins.push(
+      new config.webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+      }));
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
     return config;
   },
