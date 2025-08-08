@@ -23,5 +23,5 @@
     }
   },
   "include": ["next-env.d.ts", "zkapp/**/*.ts", "zkapp/**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "backend/**/*", "contracts/**/*", "oracle-relay/**/*", "src/**/*"]
+  "exclude": ["node_modules", "packages/backend/cli/backend/**/*", "contracts/**/*", "oracle-relay/**/*", "src/**/*"]
 }

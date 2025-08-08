@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { StatCard } from "~~/components/StatCard";
 import { StatusCard } from "~~/components/StatusCard";
+import { ProtectedRoute } from "~~/components/ProtectedRoute";
+import { useAuth } from "~~/context/AuthContext";
 import { BackendService } from "~~/services/backend";
 import { OracleService } from "~~/services/oracle";
 import { SuiService } from "~~/services/sui";
@@ -16,6 +18,7 @@ interface ModuleStatus {
 }
 
 export default function DashboardPage() {
+  const { userAddress, userKeyData } = useAuth();
   const [moduleStatuses, setModuleStatuses] = useState<Record<string, ModuleStatus>>({
     collectors: { status: 'skip', details: 'Not tested yet' },
     oracle: { status: 'skip', details: 'Not tested yet' },
@@ -159,7 +162,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <>
+    <ProtectedRoute>
       <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
         <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
           <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
@@ -235,9 +238,28 @@ export default function DashboardPage() {
                 onTest={testUsdc}
               />
             </div>
+            
+            {/* User Info Section */}
+            <div className="mt-8 bg-white p-6 rounded-lg shadow">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Connected User</h3>
+              <div className="space-y-2">
+                <div>
+                  <span className="text-sm font-medium text-gray-500">Sui Address:</span>
+                  <p className="text-sm font-mono text-gray-900 bg-gray-100 p-2 rounded mt-1">
+                    {userAddress || 'Not connected'}
+                  </p>
+                </div>
+                <div>
+                  <span className="text-sm font-medium text-gray-500">Max Epoch:</span>
+                  <p className="text-sm text-gray-700">
+                    {userKeyData?.maxEpoch || 'N/A'}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </ProtectedRoute>
   );
 }
