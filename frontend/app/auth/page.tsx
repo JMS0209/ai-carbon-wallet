@@ -109,11 +109,15 @@ export default function AuthPage() {
         setStep("Generating zero-knowledge proof...");
         // Prepare ZK proof request
         // 使用存储的公钥，而不是重新生成
-        const extendedEphemeralPublicKey = userKeyData.ephemeralPublicKey;
+        // Convert base64 public key to decimal BigInt string as required by Mysten prover
+        const extendedEphemeralPublicKeyB64 = userKeyData.ephemeralPublicKey;
+        const extendedEphemeralPublicKeyDec = toBigIntBE(
+          Buffer.from(fromB64(extendedEphemeralPublicKeyB64))
+        ).toString();
 
         const zkpRequestPayload: ZKPRequest = {
           jwt: jwtEncoded,
-          extendedEphemeralPublicKey: extendedEphemeralPublicKey,
+          extendedEphemeralPublicKey: extendedEphemeralPublicKeyDec,
           maxEpoch: userKeyData.maxEpoch.toString(),
           jwtRandomness: userKeyData.randomness,
           salt: userSalt.toString(),
@@ -123,12 +127,11 @@ export default function AuthPage() {
         // 转换为证明服务期望的格式
         const proverPayload = {
           jwt: jwtEncoded,
-          extendedEphemeralPublicKey: extendedEphemeralPublicKey,
+          extendedEphemeralPublicKey: extendedEphemeralPublicKeyDec,
           maxEpoch: userKeyData.maxEpoch.toString(),
           jwtRandomness: userKeyData.randomness,
           salt: userSalt.toString(),
-          keyClaimName: "sub",
-          nonce: userKeyData.nonce // Add the nonce that was used in OAuth
+          keyClaimName: "sub"
         };
 
         console.log("ZK Proof Request Payload:", proverPayload);

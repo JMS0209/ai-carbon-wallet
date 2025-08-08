@@ -3,11 +3,17 @@ import axios from 'axios';
 import Database from 'better-sqlite3';
 import path from 'path';
 import { createHash } from 'crypto';
+import fs from 'fs';
 
 const PROVER_URL = process.env.PROVER_URL || 'https://prover.mystenlabs.com/v1';
 
 // Initialize SQLite database
 const dbPath = path.join(process.cwd(), 'data', 'zklogin.db');
+// Ensure database directory exists
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
 const db = new Database(dbPath);
 
 // Track ongoing requests to prevent duplicates

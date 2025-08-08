@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SuiClient } from '@mysten/sui/client';
 import Database from 'better-sqlite3';
 import path from 'path';
+import fs from 'fs';
 
 const suiClient = new SuiClient({ 
   url: process.env.NEXT_PUBLIC_SUI_NETWORK_URL || 'https://fullnode.testnet.sui.io:443'
@@ -9,6 +10,11 @@ const suiClient = new SuiClient({
 
 // Initialize SQLite database
 const dbPath = path.join(process.cwd(), 'data', 'zklogin.db');
+// Ensure database directory exists on all machines
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
 const db = new Database(dbPath);
 
 // Create table if it doesn't exist
