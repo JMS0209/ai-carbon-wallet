@@ -19,7 +19,7 @@ export interface EnergySampleResponse {
 }
 
 export class BackendService {
-  static async getHealth(): Promise<BackendHealthResponse> {
+  static async pingHealth(): Promise<BackendHealthResponse> {
     const startTime = Date.now();
     
     try {
@@ -46,34 +46,34 @@ export class BackendService {
     }
   }
 
-  static async postSampleEnergy(jobId: string, kwh: number, co2eq: number): Promise<EnergySampleResponse> {
+  static async sampleEnergyRead(): Promise<EnergySampleResponse> {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/energy/sample`, {
-        method: 'POST',
+      const response = await fetch(`${BACKEND_URL}/api/energy`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          jobId,
-          kwh,
-          co2eq,
-          timestamp: Date.now(),
-        }),
       });
       
       if (!response.ok) {
+        if (response.status === 404) {
+          return {
+            success: false,
+            error: 'Energy endpoint not implemented',
+          };
+        }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
       return await response.json();
     } catch (error) {
-      throw new Error(`Energy sample post failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`Energy sample read failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
   static async testConnection(): Promise<{ status: 'ok' | 'fail' | 'skip'; details: string }> {
     try {
-      const health = await this.getHealth();
+      const health = await this.pingHealth();
       return {
         status: 'ok',
         details: `Connected (${health.latency}ms) - ${health.message}`,
@@ -82,7 +82,7 @@ export class BackendService {
       if (!BACKEND_URL || BACKEND_URL === 'http://localhost:3001') {
         return {
           status: 'skip',
-          details: 'Backend URL not configured',
+          details: 'Backend URL not configured or server not running',
         };
       }
       return {

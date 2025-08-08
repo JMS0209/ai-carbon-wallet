@@ -1,3 +1,5 @@
+import { request, gql } from 'graphql-request';
+
 const SUBGRAPH_URL = process.env.NEXT_PUBLIC_SUBGRAPH_URL;
 
 export interface EnergyIssued {
@@ -19,34 +21,12 @@ export interface SubgraphResponse<T> {
 }
 
 export class SubgraphService {
-  static async testConnection(): Promise<{ status: 'ok' | 'fail' | 'skip'; details: string }> {
-    if (!SUBGRAPH_URL) {
-      return {
-        status: 'skip',
-        details: 'Subgraph URL not configured',
-      };
-    }
-
-    try {
-      const count = await this.getEnergyIssuedCount();
-      return {
-        status: 'ok',
-        details: `Connected - ${count} energy records indexed`,
-      };
-    } catch (error) {
-      return {
-        status: 'fail',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
-  }
-
-  static async getEnergyIssuedCount(): Promise<number> {
+  static async getEnergyIssuedCount(): Promise<{ count: number; meta?: any }> {
     if (!SUBGRAPH_URL) {
       throw new Error('Subgraph URL not configured');
     }
 
-    const query = `
+    const query = gql`
       query {
         energyIssueds(first: 1) {
           id
@@ -61,27 +41,16 @@ export class SubgraphService {
     `;
 
     try {
-      const response = await fetch(SUBGRAPH_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const result: SubgraphResponse<{ energyIssueds: EnergyIssued[] }> = await response.json();
+      const data = await request(SUBGRAPH_URL, query) as any;
       
-      if (result.errors) {
-        throw new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
+      if (data.errors) {
+        throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
       }
 
-      // For now, return a placeholder count
-      // In a real implementation, you'd query the total count
-      return result.data.energyIssueds.length;
+      return {
+        count: data.energyIssueds?.length || 0,
+        meta: data._meta,
+      };
     } catch (error) {
       throw new Error(`Subgraph query failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -92,7 +61,7 @@ export class SubgraphService {
       throw new Error('Subgraph URL not configured');
     }
 
-    const query = `
+    const query = gql`
       query($limit: Int!) {
         energyIssueds(first: $limit, orderBy: timestamp, orderDirection: desc) {
           id
@@ -110,30 +79,37 @@ export class SubgraphService {
     `;
 
     try {
-      const response = await fetch(SUBGRAPH_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          query,
-          variables: { limit }
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const result: SubgraphResponse<{ energyIssueds: EnergyIssued[] }> = await response.json();
+      const data = await request(SUBGRAPH_URL, query, { limit }) as any;
       
-      if (result.errors) {
-        throw new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
+      if (data.errors) {
+        throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
       }
 
-      return result.data.energyIssueds;
+      return data.energyIssueds || [];
     } catch (error) {
       throw new Error(`Subgraph query failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  static async testConnection(): Promise<{ status: 'ok' | 'fail' | 'skip'; details: string }> {
+    if (!SUBGRAPH_URL) {
+      return {
+        status: 'skip',
+        details: 'Subgraph URL not configured',
+      };
+    }
+
+    try {
+      const result = await this.getEnergyIssuedCount();
+      return {
+        status: 'ok',
+        details: `Connected - ${result.count} energy records indexed`,
+      };
+    } catch (error) {
+      return {
+        status: 'fail',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   }
 }

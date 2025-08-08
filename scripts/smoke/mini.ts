@@ -12,7 +12,7 @@ import { UsdcService } from "../../frontend/services/usdc";
 
 interface TestSummary {
   module: string;
-  status: 'ok' | 'fail' | 'skip';
+  status: 'ok' | 'warn' | 'fail' | 'skip';
   details: string;
 }
 
@@ -113,12 +113,18 @@ async function main() {
   
   console.log('\n📊 Summary:');
   const okCount = results.filter(r => r.status === 'ok').length;
+  const warnCount = results.filter(r => r.status === 'warn').length;
   const skipCount = results.filter(r => r.status === 'skip').length;
   const failCount = results.filter(r => r.status === 'fail').length;
   
   console.log(`✅ OK: ${okCount}`);
+  console.log(`⚠️ WARN: ${warnCount}`);
   console.log(`⏭️ SKIP: ${skipCount}`);
   console.log(`❌ FAIL: ${failCount}`);
+  
+  // Print JSON summary
+  console.log('\n📋 JSON Summary:');
+  console.log(JSON.stringify(results, null, 2));
   
   if (failCount > 0) {
     process.exit(1);

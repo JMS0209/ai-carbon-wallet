@@ -10,7 +10,7 @@ import { UsdcService } from "~~/services/usdc";
 
 interface TestResult {
   module: string;
-  status: 'ok' | 'fail' | 'skip';
+  status: 'ok' | 'warn' | 'fail' | 'skip';
   details: string;
   data?: any;
 }
@@ -25,7 +25,7 @@ export default function DebugPage() {
 
     // Backend test
     try {
-      const health = await BackendService.getHealth();
+      const health = await BackendService.pingHealth();
       newResults.push({
         module: 'Backend',
         status: 'ok',

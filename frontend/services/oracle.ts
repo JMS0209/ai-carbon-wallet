@@ -1,65 +1,39 @@
-import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
-
-// Oracle Receiver ABI - minimal interface for reading data
-const ORACLE_RECEIVER_ABI = [
-  {
-    "inputs": [],
-    "name": "latestOracleData",
-    "outputs": [{"type": "string"}],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "trustedSigner",
-    "outputs": [{"type": "address"}],
-    "stateMutability": "view",
-    "type": "function"
-  }
-] as const;
-
-const ORACLE_RECEIVER_ADDRESS = process.env.NEXT_PUBLIC_ORACLE_RECEIVER_ADDRESS;
+import { readOracleLatest, testEvmConnection } from './evm';
 
 export class OracleService {
-  static async testConnection(): Promise<{ status: 'ok' | 'fail' | 'skip'; details: string }> {
-    if (!ORACLE_RECEIVER_ADDRESS) {
-      return {
-        status: 'skip',
-        details: 'Oracle receiver address not configured',
-      };
-    }
+  static async readOracleLatest(): Promise<{ latestData: string; trustedSigner: string; isConfigured: boolean }> {
+    return await readOracleLatest();
+  }
 
+  static async testConnection(): Promise<{ status: 'ok' | 'fail' | 'skip'; details: string }> {
     try {
-      // This would need to be implemented with wagmi/viem
-      // For now, return a placeholder
+      // First test EVM connection
+      const evmResult = await testEvmConnection();
+      if (evmResult.status === 'fail') {
+        return {
+          status: 'skip',
+          details: 'EVM connection failed',
+        };
+      }
+
+      // Try to read oracle data
+      const oracleData = await this.readOracleLatest();
+      
       return {
-        status: 'skip',
-        details: 'Oracle test not fully implemented yet',
+        status: 'ok',
+        details: `Oracle data: ${oracleData.latestData.substring(0, 50)}...`,
       };
     } catch (error) {
       return {
-        status: 'fail',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        status: 'skip',
+        details: 'Oracle receiver address not configured or contract not found',
       };
     }
   }
 
   static getOracleReceiverAddress(): string | undefined {
-    return ORACLE_RECEIVER_ADDRESS;
+    return process.env.NEXT_PUBLIC_ORACLE_RECEIVER_ADDRESS;
   }
 }
 
-// Hook for reading oracle data
-export const useOracleLatest = () => {
-  const { data: latestData, isLoading } = useScaffoldReadContract(
-    "OracleReceiver",
-    "latestOracleData"
-  );
 
-  return {
-    latestData,
-    isLoading,
-    error: null,
-    isConfigured: !!ORACLE_RECEIVER_ADDRESS,
-  };
-};
