@@ -7,7 +7,7 @@ pragma solidity ^0.8.19;
 // TODO: Add payment streaming for continuous offset payments based on usage
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
@@ -47,7 +47,7 @@ contract PaymentProcessor is ReentrancyGuard, Ownable {
         string jobId
     );
     
-    constructor(address _usdc) {
+    constructor(address _usdc) Ownable(msg.sender) {
         usdc = IERC20(_usdc);
     }
     
