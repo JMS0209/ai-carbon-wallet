@@ -1,5 +1,5 @@
 import { id } from 'ethers';
-import { sealClient } from '../..///oracle-relay/src/sealVerifier';
+import { sealClient } from '../../oracle-relay/src/sealVerifier';
 
 const secret = new TextEncoder().encode();
 const encryptedObject = await sealClient.encrypt({

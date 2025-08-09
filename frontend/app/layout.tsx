@@ -11,7 +11,7 @@ export const metadata = getMetadata({
   description: "Enterprise platform to measure, tokenise and offset AI energy use",
 });
 
-const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
+const ScaffoldEthApp = ({ children }: { children?: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning className={``}>
       <body suppressHydrationWarning>

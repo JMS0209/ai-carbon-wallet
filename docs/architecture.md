@@ -48,77 +48,69 @@ project-root/
 │
 │   ├── backend/
 │   │   ├── src/
-│   │   │   ├── api/
-                ├── emissions.ts           # GET emissions data from Python agents or subgraph
-                ├── carbonCredits.ts       # POST purchase request, GET available credits
-                ├── wallet/                 # GET wallet metadata, balances, roles
-                        burner.ts
-                        create.ts
-                        index.ts          
-                ├── oracle.ts              # Trigger oracle updates, fetch latest values
-                ├── auth.ts                # Role-based access control, Seal/Walrus integration
-                ├── networks.ts             # Chain status, supported networks, RPC health
-                ├── webhook.ts             # Handle external triggers (e.g. carbon offset confirmations)
-                ├── index.ts
-            |---auth/
-                    verifyRole.ts
-│   │   │   ├── oracle/
-                    |--__tests__/
-                            oracleRelay.test.ts
-                    |--ethereum/
-                            relayOracleData.ts
-                    |--sapphire/
-                            relayOracleData.ts
-                    |-- sui/
-                            relayOracleData.ts
-                    oracleRelay.js
-                    submitOracleData.ts
-│   │   │   ├── utils/
-                ├── ai/
-                │   ├── estimateCarbon.ts          # Compute emissions from AI usage
-                │   ├── normalizeEnergyData.ts     # Clean and standardize energy logs
-                │   └── fetchAIReport.ts           # Pull metrics from Python agents or logs
+                ├── api/                         # Core backend logic and helpers
+                │   ├── wallet/                  # Wallet management utilities
+                │   │   ├── burner.ts
+                │   │   ├── create.ts
+                │   │   └── index.ts
+                │   ├── oracle/                  # Oracle data fetching, validation, and submission
+                │   │   ├── index.ts
+                │   │   ├── types.ts
+                │   │   ├── config/
+                │   │   │   ├── chains.ts
+                │   │   │   └── feeds.ts
+                │   │   ├── utils/
+                │   │   │   ├── fetchFeed.ts
+                │   │   │   ├── validateFeed.ts
+                │   │   │   └── transformFeed.ts
+                │   │   ├── submit/
+                │   │   │   ├── submitToSui.ts
+                │   │   │   ├── submitToEth.ts
+                │   │   │   └── submitToSapphire.ts
+                │   │   ├── signer/
+                │   │   │   ├── getSigner.ts
+                │   │   │   └── simulateSigner.ts
+                │   │   └── test/
+                │   │       ├── mockFeeds.ts
+                │   │       └── oracle.test.ts
+                │   ├── contracts/              # Smart contract ABIs and deployment helpers
+                │   │   ├── abis/
+                │   │   │   ├── Oracle.json
+                │   │   │   └── RoleManager.json
+                │   │   ├── deploy.ts
+                │   │   └── getContract.ts
+                │   ├── ai/                     # AI integration for sustainability tracking
+                │   │   ├── energyTracker.ts
+                │   │   ├── carbonEstimator.ts
+                │   │   └── index.ts
+                │   └── utils/                  # Shared backend utilities
+                │       ├── env.ts
+                │       ├── constants.ts
+                │       ├── format.ts
+                │       └── logger.ts
 
-                ├── crypto/
-                │   ├── encryptPayload.ts          # Encrypt oracle data (Seal/Walrus)
-                │   ├── decryptPayload.ts          # Decrypt confidential responses
-                │   ├── hashMessage.ts             # Generate hashes (keccak256, Poseidon)
-                │   └── signTypedData.ts           # EIP-712 signing helper
+                ├── cli/                        # Command-line tools for backend ops
+                │   ├── index.ts
+                │   ├── commands/
+                │   │   ├── provisionRole.ts
+                │   │   ├── submitOracle.ts
+                │   │   ├── generateWallet.ts
+                │   │   ├── checkBalance.ts
+                │   │   └── verifySubmission.ts
+                │   ├── utils/
+                │   │   ├── logger.ts
+                │   │   ├── prompt.ts
+                │   │   └── formatOutput.ts
+                │   ├── constants.ts
+                │   └── types.ts
 
-                ├── format/
-                │   ├── formatOracleData.ts        # Normalize AI output for on-chain use
-                │   ├── parseSubgraphResponse.ts   # Extract and reshape GraphQL data
-                │   └── convertUnits.ts            # Convert kWh, CO₂e, USD, etc.
+                ├── jobs/                       # Scheduled or automated backend tasks
+                │   ├── runOracleJob.ts
+                │   ├── syncCarbonCredits.ts
+                │   └── auditProjects.ts
 
-                ├── network/
-                │   ├── getProvider.ts             # Return RPC provider per chain
-                │   ├── getSigner.ts               # Return signer object with wallet integration
-                │   └── retryWithBackoff.ts        # Retry logic for flaky RPC/oracle calls
-
-                ├── test/
-                │   ├── validateOracleInput.ts     # Schema check for AI output
-                │   ├── mockOracleData.ts          # Generate mock data for local testing
-                │   └── compareChainResponses.ts   # Compare oracle results across chains
-
-                └── index.ts                       # Optional: export all utils from one place
-
-│   │   │   └── cli/
-                ├── index.ts                   # Entry point for CLI commands (e.g. using yargs or commander)
-
-                ├── commands/
-                │   ├── provisionRole.ts       # Assigns roles to wallets (e.g. oracle submitter, admin)
-                │   ├── submitOracle.ts        # Manually triggers oracle data submission
-                │   ├── generateWallet.ts      # Creates and saves burner or named wallets
-                │   ├── checkBalance.ts        # Checks wallet balance across chains
-                │   └── verifySubmission.ts    # Verifies oracle data on-chain
-
-                ├── utils/
-                │   ├── logger.ts              # CLI-friendly logging (colors, timestamps)
-                │   ├── prompt.ts              # Interactive prompts (e.g. confirm, select chain)
-                │   └── formatOutput.ts        # Formats CLI output (tables, JSON, etc.)
-                
-                ├── constants.ts               # Shared constants (e.g. role IDs, chain names)
-                └── types.ts                   # CLI-specific types and interfaces
+                ├── server.ts                   # Optional Express or RPC server entry point
+                └── index.ts                    # Main backend entry point (e.g. for jobs or CLI)
 
 │
 │   ├── contracts/
