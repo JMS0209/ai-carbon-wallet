@@ -3,6 +3,7 @@
 import { useAuth } from "~~/context/AuthContext";
 import { useState } from "react";
 
+// Deprecated: replaced by Scaffold-ETH Header component
 export const Navbar = () => {
   const { userAddress, logout, isAuthenticated } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);

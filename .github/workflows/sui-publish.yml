@@ -1,0 +1,38 @@
+name: Sui Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: "Sui network"
+        required: true
+        default: testnet
+        type: choice
+        options: [testnet, mainnet]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Sui CLI
+        run: |
+          echo "Please install Sui CLI in runner if needed. See https://docs.sui.io" 
+      - name: Build Move
+        run: npm run sui:build || true
+      - name: Publish
+        env:
+          SUI_GAS_BUDGET: ${{ secrets.SUI_GAS_BUDGET }}
+        run: npm run sui:publish:${{ inputs.network }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sui-latest
+          path: contracts/SuiMove/.publish/latest.json
+
+

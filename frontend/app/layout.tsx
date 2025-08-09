@@ -2,7 +2,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import { AuthProvider } from "~~/context/AuthContext";
-import { Navbar } from "~~/components/Navbar";
+import { Header } from "~~/components/Header";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
@@ -19,7 +19,7 @@ const ScaffoldEthApp = ({ children }: { children?: React.ReactNode }) => {
           <AuthProvider>
             <ScaffoldEthAppWithProviders>
               <div className="min-h-screen bg-gray-50">
-                <Navbar />
+                <Header />
                 <main>
                   {children}
                 </main>
