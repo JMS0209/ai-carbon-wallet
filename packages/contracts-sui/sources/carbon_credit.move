@@ -1,4 +1,4 @@
-module carbon::carbon_credit {
+module carbon_credit::carbon_credit {
     use sui::object::{Self, UID};
     use sui::tx_context::TxContext;
     use sui::transfer;
