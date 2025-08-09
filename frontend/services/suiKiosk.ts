@@ -44,11 +44,25 @@ export async function getEnergyNftListings(): Promise<{ count: number; details: 
 }
 
 export async function listInKiosk(_args: { nftId: string; price: string }): Promise<{ ok: boolean; reason?: string }> {
-  return { ok: false, reason: "Listing not enabled yet in this step (signer required)" };
+  try {
+    const res = await fetch('/api/sui/kiosk/list', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(_args) });
+    if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
+    await res.json();
+    return { ok: true };
+  } catch (e: any) {
+    return { ok: false, reason: e?.message || 'list failed' };
+  }
 }
 
 export async function buyFromKiosk(_args: { listingId: string }): Promise<{ ok: boolean; reason?: string }> {
-  return { ok: false, reason: "Buy not enabled yet in this step (signer required)" };
+  try {
+    const res = await fetch('/api/sui/kiosk/buy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(_args) });
+    if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
+    await res.json();
+    return { ok: true };
+  } catch (e: any) {
+    return { ok: false, reason: e?.message || 'buy failed' };
+  }
 }
 
 

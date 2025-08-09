@@ -215,6 +215,7 @@ SUBGRAPH_ENDPOINT=https://api.thegraph.com/subgraphs/name/your-subgraph
 ## Progress Log
 
 - [2025-08-09] Step 4: Sui Kiosk marketplace integrated behind RBAC. Added `/marketplace` page with role-gated sections (SIGNER can see "My Assets" and prepare to list; BUYER can view listings). Added TransferPolicy stub in `contracts/SuiMove/`. Dashboard now includes a "Marketplace (Sui Kiosk)" StatusCard with a read-only "Test Now" that reports listing count. Env example updated with Sui Kiosk keys. All secrets remain client-entered; no plaintext persistence.
+- [2025-08-09] Step 5: EVM USDC purchase flow added (Base Sepolia). Read-first UX on `/offsets` (token meta, balance, allowance). Dev-only writes (Approve, Purchase Offsets) behind `PAYMENTS_DEV_ENABLED`. Dashboard payments card "Test Now" shows symbol/decimals/allowance. Env keys for RPC/contract addresses documented.
 
 ### Additional Environment Variables (Step 4)
 
@@ -226,6 +227,22 @@ NEXT_PUBLIC_SUI_PACKAGE_ID=            # set your published EnergyNFT package id
 NEXT_PUBLIC_SUI_KIOSK_TYPE=            # optional override; default Sui framework kiosk type
 NEXT_PUBLIC_SUI_GAS_BUDGET=30000000    # demo tx gas budget
 ```
+
+### Environment Variables (Step 5 – EVM Payments)
+
+```bash
+# EVM / Base Sepolia
+NEXT_PUBLIC_EVM_CHAIN_ID=84532
+NEXT_PUBLIC_EVM_RPC_URL=https://sepolia.base.org
+
+# Contracts
+NEXT_PUBLIC_USDC_ADDRESS=0x...
+NEXT_PUBLIC_PAYMENT_PROCESSOR_ADDRESS=0x...
+
+# Feature flags (writes)
+PAYMENTS_DEV_ENABLED=true
+```
+
 
 
 ## Next Steps

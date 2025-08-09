@@ -5,13 +5,16 @@ import { ProtectedRoute } from "~~/components/ProtectedRoute";
 import { WithRoleGuard } from "~~/providers/withRoleGuard";
 import { useAuth } from "~~/context/AuthContext";
 import { currentRole } from "~~/services/rbac/roles";
-import { getEnergyNftListings, getMyEnergyNfts } from "~~/services/suiKiosk";
+import { getEnergyNftListings, getMyEnergyNfts, listInKiosk, buyFromKiosk } from "~~/services/suiKiosk";
+import { toMist } from "~~/utils/suiMoney";
 
 export default function MarketplacePage() {
   const { userAddress } = useAuth();
   const [role, setRole] = useState<"SIGNER" | "BUYER" | null>(null);
   const [myNfts, setMyNfts] = useState<any[]>([]);
   const [listings, setListings] = useState<any[]>([]);
+  const [price, setPrice] = useState<string>("0.1");
+  const [busy, setBusy] = useState<string>("");
   const devMintEnabled = String(process.env.NEXT_PUBLIC_RBAC_DEV_MODE || "false") === "true";
 
   useEffect(() => {
@@ -52,9 +55,18 @@ export default function MarketplacePage() {
                     {myNfts.map(n => (
                       <li key={n.objectId} className="flex items-center justify-between bg-base-200 rounded-lg p-3">
                         <div className="font-mono text-sm">{n.objectId}</div>
-                        <button className="btn btn-primary btn-sm" disabled>
-                          List in Kiosk
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <input className="input input-bordered input-sm w-28" placeholder="Price SUI" value={price} onChange={e => setPrice(e.target.value)} />
+                          <button className="btn btn-primary btn-sm" disabled={busy === n.objectId} onClick={async () => {
+                            setBusy(n.objectId);
+                            const ok = await listInKiosk({ nftId: n.objectId, price: price });
+                            setBusy("");
+                            if (ok.ok) alert(`Listed ${n.objectId} at ${price} SUI (~${toMist(price).toString()} MIST)`);
+                            else alert(`List failed: ${ok.reason}`);
+                          }}>
+                            {busy === n.objectId ? 'Listing...' : 'List'}
+                          </button>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -71,8 +83,13 @@ export default function MarketplacePage() {
                   {listings.map(x => (
                     <li key={x.idx} className="flex items-center justify-between bg-base-200 rounded-lg p-3">
                       <div>Listing #{x.idx}</div>
-                      <button className="btn btn-secondary btn-sm" disabled={role !== "BUYER"}>
-                        Buy
+                      <button className="btn btn-secondary btn-sm" disabled={role !== "BUYER" || busy === `buy-${x.idx}`} onClick={async () => {
+                        setBusy(`buy-${x.idx}`);
+                        const ok = await buyFromKiosk({ listingId: String(x.idx) });
+                        setBusy("");
+                        if (ok.ok) alert(`Bought listing ${x.idx}`); else alert(`Buy failed: ${ok.reason}`);
+                      }}>
+                        {busy === `buy-${x.idx}` ? 'Buying...' : 'Buy'}
                       </button>
                     </li>
                   ))}

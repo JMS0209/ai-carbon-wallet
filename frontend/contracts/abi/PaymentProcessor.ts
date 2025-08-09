@@ -8,6 +8,17 @@ export const PaymentProcessorABI = [
     "type": "function"
   },
   {
+    "inputs": [
+      {"type": "uint256", "name": "amount"},
+      {"type": "uint256", "name": "carbonCredits"},
+      {"type": "string", "name": "jobId"}
+    ],
+    "name": "purchaseOffset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [{"type": "bytes32"}],
     "name": "payments",
     "outputs": [

@@ -1,3 +1,10 @@
+export const evmAddresses = {
+  chainId: Number(process.env.NEXT_PUBLIC_EVM_CHAIN_ID || 84532),
+  rpcUrl: process.env.NEXT_PUBLIC_EVM_RPC_URL || 'https://sepolia.base.org',
+  usdc: process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}` | undefined,
+  paymentProcessor: process.env.NEXT_PUBLIC_PAYMENT_PROCESSOR_ADDRESS as `0x${string}` | undefined,
+} as const;
+
 // Contract addresses configuration
 // All addresses are read from environment variables
 

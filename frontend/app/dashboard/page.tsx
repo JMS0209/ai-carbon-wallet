@@ -185,7 +185,7 @@ export default function DashboardPage() {
         usdc: result
       }));
       
-      const logEntry = `[${new Date().toISOString()}] usdc ${result.status} ${result.details}`;
+      const logEntry = `[${new Date().toISOString()}] PAYMENTS test ${result.status} ${result.details}`;
       console.log(logEntry);
       
     } catch (error) {
