@@ -1,6 +1,6 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 
-export const MIST_PER_SUI = 1_000_000_000n;
+export const MIST_PER_SUI = BigInt(1_000_000_000);
 
 export function toMist(sui: string | number): bigint {
   const s = typeof sui === "number" ? String(sui) : sui.trim();

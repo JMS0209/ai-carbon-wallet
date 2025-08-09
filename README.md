@@ -243,14 +243,37 @@ NEXT_PUBLIC_PAYMENT_PROCESSOR_ADDRESS=0x...
 PAYMENTS_DEV_ENABLED=true
 ```
 
-## Sui Client (dApp Kit) setup
+## Wallet Integration
 
-- Packages: `@mysten/sui`, `@mysten/dapp-kit`, `@tanstack/react-query`.
-- Provider order (App Router): ThemeProvider → React Query (QueryClientProvider) → SuiClientProvider → WalletProvider → RainbowKit/Wagmi → app.
-- Network: uses `NEXT_PUBLIC_SUI_RPC_URL` if set; otherwise `getFullnodeUrl(NEXT_PUBLIC_SUI_NETWORK || 'testnet')`.
-- Styles: `@mysten/dapp-kit/dist/index.css` imported once at app root.
-- Verify at: `/debug/sui` (Connect, then lists owned objects via `useSuiClientQuery`).
-- Docs: Sui TS SDK client app & dApp Kit.
+### EVM Wallet Connect (RainbowKit)
+
+- **Components**: `RainbowKitCustomConnectButton` integrated into the main navigation bar
+- **Provider location**: `components/ScaffoldEthAppWithProviders.tsx` contains wagmi and RainbowKit providers
+- **Button placement**: Top-right of the navbar, visible on desktop and mobile after zkLogin authentication
+- **Target network**: Base Sepolia (84532) - no Foundry/localhost unless `NEXT_PUBLIC_ENABLE_LOCAL_CHAIN=true`
+- **Required environment variables**:
+  - `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID`: Your WalletConnect project ID for QR code connections
+  - `NEXT_PUBLIC_EVM_RPC_URL`: Base Sepolia RPC endpoint (https://sepolia.base.org)
+  - `NEXT_PUBLIC_EVM_CHAIN_ID`: 84532 (Base Sepolia)
+- **Documentation**: [RainbowKit ConnectButton](https://rainbowkit.com/docs/connect-button)
+
+### How to get WalletConnect Project ID
+
+1. Visit https://dashboard.reown.com
+2. Sign in or create an account
+3. Click **Create Project**
+4. Copy the **Project ID** from your project dashboard
+5. Set `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_project_id` in your environment
+6. **Note**: WalletConnect QR code functionality requires this ID. Without it, the app will work with "Injected/MetaMask" connections only, and a warning will be logged to console.
+
+### Sui Client (dApp Kit) setup
+
+- **Packages**: `@mysten/sui`, `@mysten/dapp-kit`, `@tanstack/react-query`.
+- **Provider order (App Router)**: ThemeProvider → React Query (QueryClientProvider) → SuiClientProvider → WalletProvider → RainbowKit/Wagmi → app.
+- **Network**: uses `NEXT_PUBLIC_SUI_RPC_URL` if set; otherwise `getFullnodeUrl(NEXT_PUBLIC_SUI_NETWORK || 'testnet')`.
+- **Styles**: `@mysten/dapp-kit/dist/index.css` imported once at app root.
+- **Verify at**: `/debug/sui` (Connect, then lists owned objects via `useSuiClientQuery`).
+- **Documentation**: [Sui TS SDK client app](https://docs.sui.io/guides/developer/first-app/client-tssdk) & [dApp Kit](https://sdk.mystenlabs.com/dapp-kit)
 
 
 

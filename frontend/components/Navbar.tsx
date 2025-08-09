@@ -2,6 +2,7 @@
 
 import { useAuth } from "~~/context/AuthContext";
 import { useState } from "react";
+import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 
 export const Navbar = () => {
   const { userAddress, logout, isAuthenticated } = useAuth();
@@ -49,8 +50,13 @@ export const Navbar = () => {
             </div>
           </div>
 
-          {/* User menu */}
-          <div className="flex items-center">
+          {/* EVM Wallet Connect and User menu */}
+          <div className="flex items-center space-x-4">
+            {/* RainbowKit Connect Button */}
+            <div className="hidden sm:block">
+              <RainbowKitCustomConnectButton />
+            </div>
+            
             <div className="relative">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -102,6 +108,11 @@ export const Navbar = () => {
 
       {/* Mobile menu */}
       <div className="md:hidden">
+        {/* Mobile EVM Wallet Connect */}
+        <div className="px-4 py-3 border-t border-gray-200">
+          <RainbowKitCustomConnectButton />
+        </div>
+        
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
           <a href="/dashboard" className="block px-3 py-2 text-gray-700 hover:text-gray-900">
             Dashboard

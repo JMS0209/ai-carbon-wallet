@@ -11,11 +11,17 @@ import { rainbowkitBurnerWallet } from "burner-connector";
 import * as chains from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
 
-const { onlyLocalBurnerWallet, targetNetworks } = scaffoldConfig;
+const { onlyLocalBurnerWallet, targetNetworks, walletConnectProjectId } = scaffoldConfig;
+
+// Only include WalletConnect if we have a valid project ID
+const hasValidProjectId = walletConnectProjectId && walletConnectProjectId.length > 0;
+if (!hasValidProjectId) {
+  console.warn("WalletConnect disabled: NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID not configured. Get one at https://dashboard.reown.com");
+}
 
 const wallets = [
   metaMaskWallet,
-  walletConnectWallet,
+  ...(hasValidProjectId ? [walletConnectWallet] : []),
   ledgerWallet,
   coinbaseWallet,
   rainbowWallet,

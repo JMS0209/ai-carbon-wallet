@@ -45,7 +45,7 @@ export async function approveIfNeeded({ owner, requiredAmount, infinite = false 
   const client = getPublicClient();
   const current = await client.readContract({ address: evmAddresses.usdc, abi: ERC20ABI, functionName: 'allowance', args: [owner, evmAddresses.paymentProcessor] }) as bigint;
   if (current >= requiredAmount) return { hash: undefined };
-  const amount = infinite ? (2n ** 256n - 1n) : requiredAmount;
+  const amount = infinite ? (BigInt(2) ** BigInt(256) - BigInt(1)) : requiredAmount;
   // simulate+write handled by wagmi in UI; here we prepare call data as guidance
   return { hash: 'simulate-in-ui' };
 }

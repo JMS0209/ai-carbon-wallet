@@ -2,6 +2,7 @@
   "name": "ai-carbon-wallet",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -67,9 +68,12 @@
     "env-cmd": "^10.1.0",
     "eslint": "^8.51.0",
     "eslint-config-next": "^14.0.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.0"
   }
 }
