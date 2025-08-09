@@ -1,7 +1,6 @@
 module carbon_credit::oracle {
     use sui::object::{Self, UID};
     use sui::tx_context::TxContext;
-    use sui::transfer;
     use std::string;
 
     /// Authority to verify credits

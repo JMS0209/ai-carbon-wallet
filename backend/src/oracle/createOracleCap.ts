@@ -1,22 +1,26 @@
-import { SuiClient, getFullnodeUrl, TransactionBlock } from '@mysten/sui/client';
-import { Ed25519Keypair } from '@mysten/sui';
+import { SuiClient, getFullnodeUrl, SuiTransactionBlock } from '@mysten/sui/client';
+import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 
-const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+const keypair = Ed25519Keypair.generate();
+import { toBase64 } from '@mysten/sui/utils';
+
+const secretKeyB64 = toBase64(keypair.export().privateKey);
+
 
 // Replace with your actual keypair or use wallet adapter
-const keypair = Ed25519Keypair.fromSecretKey(/* your secret key buffer */);
+keypair = Ed25519Keypair.fromSecretKey(secretKeyB64);
 
 const packageId = '0x7f72c5420cc96b4af42bdc98a15663ecaf47d2c1a1dcde343cacb6b69496c447';
 
 async function createOracleCap() {
-  const txb = new TransactionBlock();
+  const txb = new SuiTransactionBlock();
 
   txb.moveCall({
     target: `${packageId}::carbon_credit::create_oracle_cap`, // or whatever your function is
     arguments: [], // add signer or other args if needed
   });
 
-  const result = await client.signAndExecuteTransactionBlock({
+  const result = await SuiClient.signAndExecuteTransactionBlock({
     signer: keypair,
     transactionBlock: txb,
     options: { showEffects: true, showObjectChanges: true },
