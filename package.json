@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -17,17 +14,12 @@
     "contracts:test": "cd contracts && npm test",
     "subgraph:codegen": "cd subgraph && graph codegen",
     "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "sui:build": "npm --workspace @ai-carbon/sui-publisher run build",
-    "sui:test": "npm --workspace @ai-carbon/sui-publisher run test:move",
-    "sui:publish:testnet": "npm --workspace @ai-carbon/sui-publisher run publish:testnet",
-    "smoke:sui": "tsx scripts/smoke/sui-pub-check.ts"
+    "docker:down": "docker-compose down"
   },
   "dependencies": {
     "@apollo/client": "^3.8.0",
     "@hey-api/openapi-ts": "^0.80.5",
     "@mysten/bcs": "^0.7.4",
-    "@mysten/dapp-kit": "^0.17.2",
     "@mysten/seal": "^0.4.20",
     "@mysten/sui": "^1.37.1",
     "@mysten/wallet-kit": "^0.7.2",
@@ -38,7 +30,7 @@
     "@openzeppelin/contracts": "^5.4.0",
     "@rainbow-me/rainbowkit": "^2.2.8",
     "@supabase/supabase-js": "^2.38.0",
-    "@tanstack/react-query": "^5.84.2",
+    "@tanstack/react-query": "^5.84.1",
     "axios": "^1.5.0",
     "better-sqlite3": "^12.2.0",
     "bigint-buffer": "^1.1.5",
