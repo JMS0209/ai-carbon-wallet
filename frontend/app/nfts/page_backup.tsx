@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ProtectedRoute } from "~~/components/ProtectedRoute";
 import { WithRoleGuard } from "~~/providers/withRoleGuard";
 import { useAuth } from "~~/context/AuthContext";
 
-// Enhanced Mock NFT data for trading
+// Mock NFT data for demonstration
 const mockNFTs = [
   {
     id: "0x1234...abcd",
@@ -162,7 +162,7 @@ const mockTransactionHistory = [
   }
 ];
 
-export default function NFTsTradingPage() {
+export default function NFTsPage() {
   const { userAddress } = useAuth();
   const [activeTab, setActiveTab] = useState<'my-nfts' | 'marketplace' | 'analytics'>('my-nfts');
   const [selectedNFT, setSelectedNFT] = useState<any>(null);
@@ -394,13 +394,13 @@ export default function NFTsTradingPage() {
   const handleBulkAction = (action: string) => {
     switch (action) {
       case 'list':
-        addNotification('info', `Bulk listing ${selectedNFTs.length} NFTs...`);
+        alert(`Listing ${selectedNFTs.length} NFTs on marketplace`);
         break;
       case 'transfer':
-        addNotification('info', `Transferring ${selectedNFTs.length} NFTs...`);
+        alert(`Transferring ${selectedNFTs.length} NFTs`);
         break;
       case 'offset':
-        addNotification('info', `Purchasing offsets for ${selectedNFTs.length} NFTs...`);
+        alert(`Purchasing offsets for ${selectedNFTs.length} NFTs`);
         break;
     }
     setSelectedNFTs([]);
@@ -426,11 +426,11 @@ export default function NFTsTradingPage() {
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
           <div className="max-w-7xl mx-auto">
             
-            {/* Header with Notifications */}
+            {/* Header */}
             <div className="flex justify-between items-center mb-8">
               <div className="text-center flex-1">
-                <h1 className="text-4xl font-bold mb-2">🛒 NFT Trading Hub</h1>
-                <p className="text-lg text-base-content/70">Buy, sell and trade your verified AI energy consumption NFTs</p>
+                <h1 className="text-4xl font-bold mb-2">Carbon-AI Pack NFTs</h1>
+                <p className="text-lg text-base-content/70">Manage and trade your verified AI energy consumption NFTs</p>
               </div>
               
               {/* Notifications */}
@@ -464,19 +464,22 @@ export default function NFTsTradingPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="bg-base-100 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer">
                 <div className="text-3xl font-bold text-primary">{myNFTs.length}</div>
-                <div className="text-sm text-base-content/70">My NFTs</div>
+                <div className="text-sm text-base-content/70">Total NFTs Owned</div>
               </div>
               <div className="bg-base-100 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer">
-                <div className="text-3xl font-bold text-success">{myNFTs.filter(n => n.isListed).length}</div>
+                <div className="text-3xl font-bold text-success">{myNFTs.filter(n => n.status === 'verified').length}</div>
+                <div className="text-sm text-base-content/70">Verified NFTs</div>
+              </div>
+              <div className="bg-base-100 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer">
+                <div className="text-3xl font-bold text-info">{myNFTs.reduce((sum, nft) => sum + nft.kwhConsumed, 0).toFixed(1)} kWh</div>
+                <div className="text-sm text-base-content/70">Total Energy Tracked</div>
+              </div>
+              <div className="bg-base-100 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer">
+                <div className="text-3xl font-bold text-warning">{myNFTs.filter(n => n.isListed).length}</div>
                 <div className="text-sm text-base-content/70">Listed for Sale</div>
               </div>
-              <div className="bg-base-100 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer">
-                <div className="text-3xl font-bold text-info">{marketplaceNFTs.length}</div>
-                <div className="text-sm text-base-content/70">Market Listings</div>
-              </div>
-              <div className="bg-base-100 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer">
-                <div className="text-3xl font-bold text-warning">{transactionHistory.length}</div>
-                <div className="text-sm text-base-content/70">Transactions</div>
+            </div>
+                <div className="text-sm text-base-content/70">Carbon Offsets</div>
               </div>
             </div>
 
@@ -486,7 +489,7 @@ export default function NFTsTradingPage() {
                 className={`tab ${activeTab === 'my-nfts' ? 'tab-active' : ''}`}
                 onClick={() => setActiveTab('my-nfts')}
               >
-                📦 My Collection
+                📦 My NFTs
               </a>
               <a 
                 className={`tab ${activeTab === 'marketplace' ? 'tab-active' : ''}`}
@@ -498,7 +501,7 @@ export default function NFTsTradingPage() {
                 className={`tab ${activeTab === 'analytics' ? 'tab-active' : ''}`}
                 onClick={() => setActiveTab('analytics')}
               >
-                📊 Trading Analytics
+                📊 Analytics
               </a>
             </div>
 
@@ -512,7 +515,7 @@ export default function NFTsTradingPage() {
                     <div className="flex-1 max-w-md">
                       <div className="form-control">
                         <label className="label">
-                          <span className="label-text">🔍 Search My NFTs</span>
+                          <span className="label-text">🔍 Search NFTs</span>
                         </label>
                         <input 
                           type="text"
@@ -580,7 +583,7 @@ export default function NFTsTradingPage() {
                           className="btn btn-sm btn-outline"
                           onClick={() => handleBulkAction('list')}
                         >
-                          🏪 Bulk List
+                          🏪 List on Marketplace
                         </button>
                         <button 
                           className="btn btn-sm btn-outline"
@@ -639,7 +642,6 @@ export default function NFTsTradingPage() {
                         <p className="text-xs text-base-content/70">{nft.model}</p>
                         <p className="text-xs text-base-content/70">{nft.organization}</p>
                         
-                        {/* NFT Stats */}
                         <div className="grid grid-cols-2 gap-2 mt-4">
                           <div className="stat">
                             <div className="stat-title text-xs">Energy</div>
@@ -651,14 +653,6 @@ export default function NFTsTradingPage() {
                           </div>
                         </div>
                         
-                        {/* Listing Status */}
-                        {nft.isListed && (
-                          <div className="bg-success/10 p-2 rounded mt-2">
-                            <div className="text-xs text-success font-semibold">Listed for {nft.listedPrice}</div>
-                          </div>
-                        )}
-                        
-                        {/* Action Buttons */}
                         <div className="card-actions justify-end mt-4">
                           <button 
                             className="btn btn-primary btn-xs"
@@ -840,7 +834,7 @@ export default function NFTsTradingPage() {
             {activeTab === 'analytics' && (
               <div>
                 <div className="bg-base-100 rounded-2xl p-6 mb-6">
-                  <h3 className="text-xl font-semibold mb-4">📊 Trading Analytics</h3>
+                  <h3 className="text-xl font-semibold mb-4">📊 Portfolio Analytics</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                     <div className="stat bg-primary/10 rounded-lg p-4">
@@ -854,42 +848,34 @@ export default function NFTsTradingPage() {
                     </div>
                     
                     <div className="stat bg-success/10 rounded-lg p-4">
-                      <div className="stat-title">Total Revenue</div>
+                      <div className="stat-title">Carbon Impact</div>
                       <div className="stat-value text-success">
-                        {transactionHistory.filter(t => t.type === 'sale').reduce((sum, tx) => 
-                          sum + parseFloat(tx.price.replace(' SUI', '')), 0
-                        ).toFixed(1)} SUI
+                        {myNFTs.reduce((sum, nft) => sum + nft.co2Equivalent, 0).toFixed(1)} tCO2e
                       </div>
-                      <div className="stat-desc">From sales</div>
+                      <div className="stat-desc">Total emissions tracked</div>
                     </div>
                     
                     <div className="stat bg-info/10 rounded-lg p-4">
-                      <div className="stat-title">Total Spent</div>
+                      <div className="stat-title">Energy Tracked</div>
                       <div className="stat-value text-info">
-                        {transactionHistory.filter(t => t.type === 'purchase').reduce((sum, tx) => 
-                          sum + parseFloat(tx.price.replace(' SUI', '')), 0
-                        ).toFixed(1)} SUI
+                        {myNFTs.reduce((sum, nft) => sum + nft.kwhConsumed, 0).toFixed(1)} kWh
                       </div>
-                      <div className="stat-desc">On purchases</div>
+                      <div className="stat-desc">Across all NFTs</div>
                     </div>
                     
                     <div className="stat bg-warning/10 rounded-lg p-4">
-                      <div className="stat-title">Net P&L</div>
+                      <div className="stat-title">Trade Volume</div>
                       <div className="stat-value text-warning">
-                        {(transactionHistory.filter(t => t.type === 'sale').reduce((sum, tx) => 
-                          sum + parseFloat(tx.price.replace(' SUI', '')), 0
-                        ) - transactionHistory.filter(t => t.type === 'purchase').reduce((sum, tx) => 
-                          sum + parseFloat(tx.price.replace(' SUI', '')), 0
-                        )).toFixed(1)} SUI
+                        {transactionHistory.length}
                       </div>
-                      <div className="stat-desc">Profit/Loss</div>
+                      <div className="stat-desc">Total transactions</div>
                     </div>
                   </div>
                   
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* NFT Distribution */}
                     <div className="bg-base-200 rounded-lg p-4">
-                      <h4 className="font-semibold mb-4">Collection Status</h4>
+                      <h4 className="font-semibold mb-4">NFT Status Distribution</h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
                           <span className="flex items-center gap-2">
@@ -915,29 +901,21 @@ export default function NFTsTradingPage() {
                       </div>
                     </div>
                     
-                    {/* Market Performance */}
+                    {/* Top Organizations */}
                     <div className="bg-base-200 rounded-lg p-4">
-                      <h4 className="font-semibold mb-4">Market Performance</h4>
+                      <h4 className="font-semibold mb-4">Top Organizations</h4>
                       <div className="space-y-3">
-                        <div className="flex justify-between items-center">
-                          <span>Avg Sale Price</span>
-                          <span className="font-bold">
-                            {transactionHistory.filter(t => t.type === 'sale').length > 0 
-                              ? (transactionHistory.filter(t => t.type === 'sale').reduce((sum, tx) => 
-                                  sum + parseFloat(tx.price.replace(' SUI', '')), 0
-                                ) / transactionHistory.filter(t => t.type === 'sale').length).toFixed(2)
-                              : '0.00'
-                            } SUI
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span>Total Sales</span>
-                          <span className="font-bold">{transactionHistory.filter(t => t.type === 'sale').length}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span>Total Purchases</span>
-                          <span className="font-bold">{transactionHistory.filter(t => t.type === 'purchase').length}</span>
-                        </div>
+                        {Object.entries(
+                          myNFTs.reduce((acc, nft) => {
+                            acc[nft.organization] = (acc[nft.organization] || 0) + 1;
+                            return acc;
+                          }, {} as Record<string, number>)
+                        ).slice(0, 4).map(([org, count]) => (
+                          <div key={org} className="flex justify-between items-center">
+                            <span className="text-sm">{org}</span>
+                            <span className="font-bold">{count} NFTs</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -1008,7 +986,7 @@ export default function NFTsTradingPage() {
                 <div className="modal-box w-11/12 max-w-2xl">
                   <h3 className="font-bold text-lg mb-4">NFT Details: {selectedNFT.jobId}</h3>
                   
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="font-semibold">Organization:</p>
                       <p>{selectedNFT.organization}</p>
@@ -1040,7 +1018,7 @@ export default function NFTsTradingPage() {
                   {selectedNFT.price && (
                     <div className="mt-4 p-4 bg-primary/10 rounded-lg">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold">Price:</span>
+                        <span className="font-semibold">Marketplace Price:</span>
                         <span className="text-2xl font-bold text-primary">{selectedNFT.price}</span>
                       </div>
                       {selectedNFT.priceUSD && (
