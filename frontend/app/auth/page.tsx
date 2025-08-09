@@ -131,10 +131,15 @@ export default function AuthPage() {
           maxEpoch: userKeyData.maxEpoch.toString(),
           jwtRandomness: userKeyData.randomness,
           salt: userSalt.toString(),
-          keyClaimName: "sub"
+          keyClaimName: "sub",
+          nonce: userKeyData.nonce  // Include the original nonce for verification
         };
 
-        console.log("ZK Proof Request Payload:", proverPayload);
+        // Debug: Log nonce matching
+        console.log("JWT nonce:", decodedJwt.nonce);
+        console.log("Our nonce:", userKeyData.nonce);
+        console.log("Nonces match:", decodedJwt.nonce === userKeyData.nonce);
+        
         const zkProof = await getZKProof(proverPayload);
 
         setStep("Completing authentication...");

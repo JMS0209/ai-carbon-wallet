@@ -259,7 +259,7 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <WithRoleGuard>
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
+      <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
           <div className="max-w-7xl mx-auto space-y-8">
             
             {/* Header */}
@@ -465,7 +465,7 @@ export default function DashboardPage() {
                   >
                     📊 Details
                   </button>
-                </div>
+          </div>
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
@@ -516,7 +516,7 @@ export default function DashboardPage() {
                       📈 Analyze
                     </button>
                   </div>
-                </div>
+          </div>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={mockOffsetData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -642,8 +642,8 @@ export default function DashboardPage() {
                     </>
                   )}
                 </div>
-              </div>
-            </div>
+          </div>
+        </div>
 
             {/* System Status */}
             <div className="bg-base-100 rounded-2xl p-6">
@@ -761,8 +761,8 @@ export default function DashboardPage() {
                   </button>
                 )}
               </div>
-            </div>
-
+              </div>
+              
             {/* User Info Section */}
             <div className="bg-base-100 rounded-2xl p-6">
               <h3 className="text-xl font-semibold mb-4">Connected User</h3>
@@ -778,12 +778,12 @@ export default function DashboardPage() {
                   <p className="text-sm bg-base-200 p-3 rounded-lg mt-1">
                     {userKeyData?.maxEpoch || 'N/A'}
                   </p>
-                </div>
               </div>
             </div>
-
           </div>
+
         </div>
+      </div>
       </WithRoleGuard>
     </ProtectedRoute>
   );

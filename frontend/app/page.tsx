@@ -43,6 +43,9 @@ export default function HomePage() {
       const jwt_randomness = generateRandomness();
       const nonce = generateNonce(ephemeralPublicKey, maxEpoch, jwt_randomness);
 
+      // Debug logging
+      console.log("Generated nonce:", nonce);
+
       const userKeyData: UserKeyData = {
         randomness: jwt_randomness.toString(),
         nonce: nonce,

@@ -1,0 +1,95 @@
+\scaffold.config.ts:3 - BaseConfig (used in module)
+\components\ClientLayout.tsx:8 - ClientLayout
+\components\Header.tsx:18 - menuLinks (used in module)
+\components\Header.tsx:42 - HeaderMenuLinks (used in module)
+\components\ScaffoldEthAppWithProviders.tsx:30 - queryClient (used in module)
+\context\AuthContext.tsx:6 - UserKeyData (used in module)
+\context\SignerContext.tsx:25 - SignerProvider
+\context\SignerContext.tsx:80 - useSigner
+\contracts\addresses.ts:17 - isConfigured
+\lib\api.ts:2 - assignRole
+\lib\api.ts:8 - revokeRole
+\lib\api.ts:14 - checkRole
+\providers\SignerProvider.tsx:14 - useSigner
+\services\backend.ts:3 - BackendHealthResponse (used in module)
+\services\backend.ts:10 - EnergySampleResponse (used in module)
+\services\evm.ts:8 - getPublicClient (used in module)
+\services\evmClient.ts:10 - getWalletClient
+\services\payments.ts:31 - quoteOffset
+\services\sealWalrus.ts:5 - SealServer
+\services\subgraph.ts:5 - EnergyIssued (used in module)
+\services\subgraph.ts:18 - SubgraphResponse
+\services\sui.ts:9 - EnergyNFT
+\services\suiKiosk.ts:13 - getClient (used in module)
+\services\suiKiosk.ts:17 - getEnergyNftType (used in module)
+\services\suiKiosk.ts:7 - OwnedEnergyNft (used in module)
+\types\zklogin.ts:34 - ZKPPayload
+\types\zklogin.ts:47 - AuthState
+\utils\suiMoney.ts:3 - MIST_PER_SUI (used in module)
+\app\auth\page.tsx:14 - default
+\app\dashboard\page_new.tsx:52 - default
+\app\debug\page.tsx:18 - default
+\app\marketplace\page_new.tsx:81 - default
+\app\marketplace\page.tsx:81 - default
+\app\nfts\page_backup.tsx:165 - default
+\app\nfts\page_enhanced.tsx:71 - default
+\app\nfts\page_new.tsx:71 - default
+\app\nfts\page_trading.tsx:165 - default
+\app\offsets\page_new.tsx:71 - default
+\app\role\page.tsx:9 - default
+\app\settings\page_new.tsx:7 - default
+\components\RoleSelector\SelectRoleModal.tsx:8 - SelectRoleModal
+\components\scaffold-eth\index.tsx:11 - Balance
+\components\scaffold-eth\index.tsx:12 - Input
+\hooks\scaffold-eth\index.ts:1 - useAnimationConfig
+\hooks\scaffold-eth\index.ts:1 - useContractLogs
+\hooks\scaffold-eth\index.ts:3 - useCopyToClipboard
+\hooks\scaffold-eth\index.ts:1 - useDeployedContractInfo
+\hooks\scaffold-eth\index.ts:1 - useFetchBlocks
+\hooks\scaffold-eth\index.ts:7 - getNetworkColor
+\hooks\scaffold-eth\index.ts:5 - DEFAULT_NETWORK_COLOR
+\hooks\scaffold-eth\index.ts:1 - useScaffoldContract
+\hooks\scaffold-eth\index.ts:1 - useScaffoldEventHistory
+\hooks\scaffold-eth\index.ts:1 - useScaffoldReadContract
+\hooks\scaffold-eth\index.ts:1 - useScaffoldWatchContractEvent
+\hooks\scaffold-eth\index.ts:1 - useScaffoldWriteContract
+\hooks\scaffold-eth\index.ts:1 - useTransactor
+\hooks\scaffold-eth\index.ts:3 - useWatchBalance
+\hooks\scaffold-eth\useDisplayUsdMode.ts:3 - useDisplayUsdMode
+\services\rbac\roles.ts:30 - getCurrentProofRef
+\services\rbac\roles.ts:50 - clearRole
+\services\rbac\roles.ts:59 - testRbacConnection
+\services\rbac\roles.ts:3 - ProofReference (used in module)
+\services\rbac\sealStore.ts:8 - createSealClient (used in module)
+\services\web3\wagmiConfig.tsx:17 - enabledChains (used in module)
+\utils\scaffold-eth\getMetadata.ts:1 - getMetadata
+\utils\scaffold-eth\index.ts:98 - getBlockExplorerTxLink
+\utils\scaffold-eth\index.ts:140 - getTargetNetworks
+\utils\scaffold-eth\index.ts:16 - RPC_CHAIN_NAMES
+\utils\scaffold-eth\index.ts:3 - notification
+\utils\scaffold-eth\index.ts:1 - getBlockExplorerUrl
+\utils\scaffold-eth\index.ts:1 - decodeTxData
+\utils\scaffold-eth\index.ts:1 - getParsedError
+\.next\types\app\layout.ts:54 - PageProps
+\.next\types\app\layout.ts:58 - LayoutProps (used in module)
+\.next\types\app\page.ts:54 - PageProps (used in module)
+\.next\types\app\page.ts:58 - LayoutProps
+\app\debug\sui\page.tsx:7 - default
+\components\scaffold-eth\Address\index.ts:13 - Address
+\.next\types\app\dashboard\page.ts:54 - PageProps (used in module)
+\.next\types\app\dashboard\page.ts:58 - LayoutProps
+\.next\types\app\nfts\page.ts:54 - PageProps (used in module)
+\.next\types\app\nfts\page.ts:58 - LayoutProps
+\.next\types\app\offsets\page.ts:54 - PageProps (used in module)
+\.next\types\app\offsets\page.ts:58 - LayoutProps
+\.next\types\app\settings\page.ts:54 - PageProps (used in module)
+\.next\types\app\settings\page.ts:58 - LayoutProps
+\app\api\proxy\energy\route.ts:5 - POST
+\app\api\sui\mint\route.ts:4 - POST
+\app\api\walrus\ping\route.ts:3 - GET
+\app\api\zkp\get\route.ts:37 - POST
+\app\api\sui\kiosk\buy\route.ts:4 - POST
+\app\api\sui\kiosk\list\route.ts:5 - POST
+\app\api\userinfo\get\salt\route.ts:44 - POST
+\.next\types\app\api\proxy\health\route.ts:313 - PageProps
+\.next\types\app\api\proxy\health\route.ts:317 - LayoutProps
