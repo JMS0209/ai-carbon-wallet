@@ -243,6 +243,15 @@ NEXT_PUBLIC_PAYMENT_PROCESSOR_ADDRESS=0x...
 PAYMENTS_DEV_ENABLED=true
 ```
 
+## Sui Client (dApp Kit) setup
+
+- Packages: `@mysten/sui`, `@mysten/dapp-kit`, `@tanstack/react-query`.
+- Provider order (App Router): ThemeProvider → React Query (QueryClientProvider) → SuiClientProvider → WalletProvider → RainbowKit/Wagmi → app.
+- Network: uses `NEXT_PUBLIC_SUI_RPC_URL` if set; otherwise `getFullnodeUrl(NEXT_PUBLIC_SUI_NETWORK || 'testnet')`.
+- Styles: `@mysten/dapp-kit/dist/index.css` imported once at app root.
+- Verify at: `/debug/sui` (Connect, then lists owned objects via `useSuiClientQuery`).
+- Docs: Sui TS SDK client app & dApp Kit.
+
 
 
 ## Next Steps

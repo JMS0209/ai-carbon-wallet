@@ -4,6 +4,7 @@ import { ThemeProvider } from "~~/components/ThemeProvider";
 import { AuthProvider } from "~~/context/AuthContext";
 import { Navbar } from "~~/components/Navbar";
 import "~~/styles/globals.css";
+import "@mysten/dapp-kit/dist/index.css";
 // Metadata export removed to keep this layout as a client-safe composition wrapper
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {

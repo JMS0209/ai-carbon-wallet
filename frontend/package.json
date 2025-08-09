@@ -16,6 +16,7 @@
     "@apollo/client": "^3.8.0",
     "@heroicons/react": "~2.1.5",
     "@mysten/bcs": "^1.7.0",
+    "@mysten/dapp-kit": "^0.17.2",
     "@mysten/seal": "^0.4.20",
     "@mysten/sui": "^1.37.1",
     "@mysten/sui.js": "^0.45.0",
