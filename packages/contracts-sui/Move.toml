@@ -1,4 +1,5 @@
 [addresses]
+carbon_credit = "0x7f72c5420cc96b4af42bdc98a15663ecaf47d2c1a1dcde343cacb6b69496c447"
 carbon = "0xed0a425bd5906684bd77be372ee98e9603f44208f5a46b3b427d4ee90dcf4d7b"
 
 [package]
