@@ -1,4 +1,5 @@
 import { Transaction } from '@mysten/sui/transactions';
+import { SuiClient } from '@mysten/sui/client';
 
 const tx = new Transaction();
 
@@ -8,3 +9,6 @@ const [coin] = tx.splitCoins(tx.gas, [tx.pure('u64', 100)]);
 
 // Transfer the split coin to a specific address.
 tx.transferObjects([coin], tx.pure('address', '0xSomeSuiAddress'));
+
+
+client.signAndExecuteTransaction({ signer: keypair, transaction: tx });

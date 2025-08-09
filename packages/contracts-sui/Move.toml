@@ -1,0 +1,10 @@
+[addresses]
+carbon = "0xed0a425bd5906684bd77be372ee98e9603f44208f5a46b3b427d4ee90dcf4d7b"
+
+[package]
+name = "carbon"
+version = "0.0.1"
+published-at = "0xYourAddress"
+
+[dependencies]
+Sui = { local = "./sui/crates/sui-framework/packages/sui-framework" }
