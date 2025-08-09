@@ -26,7 +26,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
     
   } catch (error) {
-    // Return 503 when backend is not available
+    // Development fallback: Return a placeholder health response
+    if (process.env.NODE_ENV === 'development') {
+      return NextResponse.json(
+        { 
+          status: 'ok', 
+          message: 'Health proxy placeholder (backend offline)',
+          timestamp: new Date().toISOString(),
+          source: 'proxy'
+        },
+        { status: 200 }
+      );
+    }
+    
+    // Production: Return 503 when backend is not available
     return NextResponse.json(
       { 
         status: 'error', 

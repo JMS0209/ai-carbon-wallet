@@ -1,5 +1,6 @@
+import { probeSeal as rbacProbeSeal, probeWalrus as rbacProbeWalrus } from "~~/services/rbac/sealStore";
+
 const WALRUS_URL = process.env.NEXT_PUBLIC_WALRUS_URL;
-const SUI_NETWORK = process.env.NEXT_PUBLIC_SUI_NETWORK || 'testnet';
 
 export interface SealServer {
   objectId: string;
@@ -8,39 +9,18 @@ export interface SealServer {
 }
 
 export class SealWalrusService {
-  static async probeSeal(network = SUI_NETWORK): Promise<{ servers: SealServer[]; firstObjectId?: string }> {
+  static async probeSeal(): Promise<{ servers: number; first?: string }> {
     try {
-      // TODO: Import and use @mysten/seal when available
-      // For now, return placeholder data
-      console.log('Probing Seal servers for network:', network);
-      
-      // Placeholder implementation - in real implementation:
-      // import { getAllowlistedKeyServers, SealClient } from '@mysten/seal'
-      // const ids = getAllowlistedKeyServers(network);
-      // const client = new SealClient({ 
-      //   serverConfigs: ids.map(id => ({ objectId: id, weight: 1 })), 
-      //   verifyKeyServers: true 
-      // });
-      
-      return {
-        servers: [],
-        firstObjectId: undefined,
-      };
+      return await rbacProbeSeal();
     } catch (error) {
-      throw new Error(`Seal probe failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Seal probe failed:', error);
+      return { servers: 0 };
     }
   }
 
   static async probeWalrus(): Promise<{ ok: boolean; url?: string }> {
-    if (!WALRUS_URL) {
-      return { ok: false };
-    }
-
     try {
-      // TODO: Implement actual Walrus health check
-      // For now, just check if URL is configured
-      console.log('Probing Walrus at:', WALRUS_URL);
-      return { ok: true, url: WALRUS_URL };
+      return await rbacProbeWalrus();
     } catch (error) {
       console.error('Walrus probe failed:', error);
       return { ok: false };
@@ -52,20 +32,21 @@ export class SealWalrusService {
       const sealResult = await this.probeSeal();
       const walrusResult = await this.probeWalrus();
 
-      if (sealResult.servers.length > 0) {
+      if (sealResult.servers > 0) {
+        const walrusMsg = walrusResult.ok ? `Walrus: OK (${walrusResult.url})` : 'Walrus: SKIP (no URL)';
         return {
           status: 'ok',
-          details: `Seal: ${sealResult.servers.length} servers, Walrus: ${walrusResult.ok ? 'configured' : 'not configured'}`,
+          details: `Seal: ${sealResult.servers} servers${sealResult.first ? ` (first: ${sealResult.first.slice(0, 8)}...)` : ''}; ${walrusMsg}`,
         };
       } else if (walrusResult.ok) {
         return {
           status: 'warn',
-          details: `Seal: no servers, Walrus: configured at ${walrusResult.url}`,
+          details: `Seal: no servers available; Walrus: configured at ${walrusResult.url}`,
         };
       } else {
         return {
           status: 'skip',
-          details: 'Seal servers not available, Walrus not configured',
+          details: 'Seal: no servers available; Walrus: SKIP (set NEXT_PUBLIC_WALRUS_URL to enable)',
         };
       }
     } catch (error) {

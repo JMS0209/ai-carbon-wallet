@@ -5,16 +5,16 @@
 // TODO: Add DAO governance mechanisms for platform parameters
 
 module ai_carbon_wallet::energy_nft {
-    use sui::object::{Self, UID};
+    use sui::object::UID;
     use sui::transfer;
-    use sui::tx_context::{Self, TxContext};
-    use std::string::{Self, String};
+    use sui::tx_context::TxContext;
+    use std::string::String;
 
     // TODO: Add Kiosk integration for NFT trading
     // TODO: Implement zkLogin authentication system
     // TODO: Add carbon offset automation logic
 
-    struct CarbonAIPack has key, store {
+    public struct CarbonAIPack has key, store {
         id: UID,
         job_id: String,
         kwh_consumed: u64,
@@ -25,7 +25,7 @@ module ai_carbon_wallet::energy_nft {
         zk_proof_hash: vector<u8>
     }
 
-    struct EnergyIssued has copy, drop {
+    public struct EnergyIssued has copy, drop {
         nft_id: address,
         job_id: String,
         kwh: u64,
@@ -52,17 +52,17 @@ module ai_carbon_wallet::energy_nft {
         // TODO: Emit EnergyIssued event for subgraph indexing
         
         let nft = CarbonAIPack {
-            id: object::new(ctx),
-            job_id: string::utf8(job_id),
+            id: sui::object::new(ctx),
+            job_id: std::string::utf8(job_id),
             kwh_consumed: kwh,
             co2_equivalent: co2eq,
-            timestamp: tx_context::epoch_timestamp_ms(ctx),
-            organization: string::utf8(org),
-            metadata_uri: string::utf8(metadata_uri),
+            timestamp: sui::tx_context::epoch_timestamp_ms(ctx),
+            organization: std::string::utf8(org),
+            metadata_uri: std::string::utf8(metadata_uri),
             zk_proof_hash: zk_proof
         };
 
-        let sender = tx_context::sender(ctx);
+        let sender = sui::tx_context::sender(ctx);
         transfer::public_transfer(nft, sender);
     }
 }

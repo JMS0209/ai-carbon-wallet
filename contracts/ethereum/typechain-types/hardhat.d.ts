@@ -26,6 +26,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ReentrancyGuard__factory>;
     getContractFactory(
+      name: "OracleReceiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OracleReceiver__factory>;
+    getContractFactory(
       name: "PaymentProcessor",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PaymentProcessor__factory>;
@@ -46,6 +50,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ReentrancyGuard>;
     getContractAt(
+      name: "OracleReceiver",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OracleReceiver>;
+    getContractAt(
       name: "PaymentProcessor",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -64,6 +73,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ReentrancyGuard>;
     deployContract(
+      name: "OracleReceiver",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OracleReceiver>;
+    deployContract(
       name: "PaymentProcessor",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PaymentProcessor>;
@@ -83,6 +96,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ReentrancyGuard>;
+    deployContract(
+      name: "OracleReceiver",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OracleReceiver>;
     deployContract(
       name: "PaymentProcessor",
       args: any[],

@@ -18,6 +18,21 @@ export interface EnergyNFT {
 }
 
 export class SuiService {
+  static requirePackageId(): string {
+    if (!SUI_PACKAGE_ID) {
+      throw new Error(
+        'NEXT_PUBLIC_SUI_PACKAGE_ID is required. ' +
+        'Deploy your Sui Move package first: cd contracts/SuiMove && sui client publish --json'
+      );
+    }
+    if (!SUI_PACKAGE_ID.startsWith('0x') || SUI_PACKAGE_ID.length < 10) {
+      throw new Error(
+        'NEXT_PUBLIC_SUI_PACKAGE_ID appears malformed. Expected format: 0x123abc...'
+      );
+    }
+    return SUI_PACKAGE_ID;
+  }
+
   static async probeSui(): Promise<{ status: 'ok' | 'fail'; details: string }> {
     try {
       const checkpoint = await suiClient.getLatestCheckpointSequenceNumber();

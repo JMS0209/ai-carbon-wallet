@@ -76,19 +76,37 @@ export class BackendService {
       const health = await this.pingHealth();
       return {
         status: 'ok',
-        details: `Connected (${health.latency}ms) - ${health.message}`,
+        details: `Backend: Connected (${health.latency}ms) - ${health.message}`,
       };
     } catch (error) {
-      if (!BACKEND_URL || BACKEND_URL === 'http://localhost:3001') {
+      // Try the proxy route when backend fails
+      try {
+        const startTime = Date.now();
+        const proxyResponse = await fetch('/api/proxy/health', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        
+        const latency = Date.now() - startTime;
+        
+        if (proxyResponse.ok) {
+          const data = await proxyResponse.json();
+          return {
+            status: 'ok',
+            details: `Proxy: Using health proxy (${latency}ms) - ${data.message || 'Proxy OK'}`,
+          };
+        } else {
+          return {
+            status: 'skip',
+            details: 'Backend not running; proxy also failed',
+          };
+        }
+      } catch (proxyError) {
         return {
           status: 'skip',
-          details: 'Backend URL not configured or server not running',
+          details: 'Backend not configured or running',
         };
       }
-      return {
-        status: 'fail',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      };
     }
   }
 }

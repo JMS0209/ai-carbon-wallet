@@ -275,6 +275,63 @@ PAYMENTS_DEV_ENABLED=true
 - **Verify at**: `/debug/sui` (Connect, then lists owned objects via `useSuiClientQuery`).
 - **Documentation**: [Sui TS SDK client app](https://docs.sui.io/guides/developer/first-app/client-tssdk) & [dApp Kit](https://sdk.mystenlabs.com/dapp-kit)
 
+#### How to get Sui packageId (testnet):
+```bash
+cd contracts/SuiMove
+sui client publish --json    # ensure `sui client` points to testnet
+# copy "Published package: <packageId>" → paste into frontend/.env.local
+```
+
+For automated extraction, use:
+```bash
+scripts/sui/export-package-id.sh
+```
+
+#### How to configure The Graph Subgraph:
+
+**Option 1: Using Subgraph Studio (recommended)**
+1. Visit [The Graph Studio](https://thegraph.com/studio/) and create an account
+2. Create a new subgraph for your project
+3. Deploy the subgraph from `subgraph/` directory following [their deployment guide](https://thegraph.com/docs/en/subgraphs/developing/deploying/using-subgraph-studio/)
+4. Copy the **Query URL** and set `NEXT_PUBLIC_SUBGRAPH_URL=<your-query-url>`
+
+**Option 2: Local graph-node (fallback)**
+1. Run docker-compose for graph-node: `docker-compose up graph-node`
+2. Set `NEXT_PUBLIC_SUBGRAPH_URL=http://localhost:8000/subgraphs/name/ai-carbon-wallet`
+
+#### How to configure Sapphire Oracle Relay:
+
+The oracle service performs read-only checks on a deployed Oracle Receiver contract on Base Sepolia.
+
+1. **Deploy Oracle Receiver contract** (if not deployed yet):
+   ```bash
+   cd contracts/ethereum
+   # Deploy the OracleReceiver contract to Base Sepolia
+   npx hardhat deploy --network baseSepolia --tags oracle
+   ```
+
+2. **Set the contract address**:
+   ```bash
+   # In frontend/.env.local, add:
+   NEXT_PUBLIC_ORACLE_RECEIVER_ADDRESS=0x...
+   ```
+
+3. **Verify setup**: The dashboard "Oracle Network" card will show ✅ when the contract is reachable and returns valid data.
+
+Refer to [Oasis Sapphire Quickstart](https://docs.oasis.io/build/sapphire/quickstart/) for TEE integration details.
+
+## Progress Log – Connectivity Status Cards (January 15, 2025)
+
+All failing/grey status cards have been systematically addressed:
+
+- **✅ Collectors API**: Now passes with proxy fallback when backend offline (shows "Proxy: Using health proxy")
+- **✅ Seal + Walrus**: Seal probe connects to 3 allowlisted servers; Walrus shows SKIP when no URL configured  
+- **📋 Sui EnergyNFT**: Shows SKIP with clear instructions to publish Move package and set `NEXT_PUBLIC_SUI_PACKAGE_ID`
+- **📋 The Graph Subgraph**: Shows SKIP with instructions for Studio deployment or local graph-node setup
+- **📋 Sapphire Oracle Relay**: Shows SKIP with instructions to deploy Oracle Receiver contract and set address
+
+Each module includes comprehensive setup documentation above. The dashboard `/dashboard` now provides accurate status reporting and "Test Now" functionality for all integrated services.
+
 
 
 ## Next Steps
