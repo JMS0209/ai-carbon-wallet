@@ -4,8 +4,26 @@ import { addresses } from '../contracts/addresses';
 import { OracleReceiverABI } from '../contracts/abi/OracleReceiver';
 import { USDCABI } from '../contracts/abi/USDC';
 
+// Oasis Sapphire support: use Sapphire RPC if provided
+const SAPPHIRE_RPC_URL = process.env.NEXT_PUBLIC_SAPPHIRE_RPC_URL;
+
 // Create public client for read-only operations
 export function getPublicClient() {
+  // If Sapphire RPC is set, use it
+  if (SAPPHIRE_RPC_URL) {
+    return createPublicClient({
+      chain: {
+        id: addresses.chainId,
+        name: 'Oasis Sapphire',
+        network: 'sapphire',
+        nativeCurrency: { name: 'Oasis', symbol: 'ROSE', decimals: 18 },
+        rpcUrls: {
+          default: { http: [SAPPHIRE_RPC_URL] },
+        },
+      },
+      transport: http(SAPPHIRE_RPC_URL),
+    });
+  }
   const chainId = addresses.chainId;
   const chain = chainId === 84532 ? baseSepolia : baseSepolia; // Default to Base Sepolia
   
